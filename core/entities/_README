@@ -1,0 +1,11 @@
+### Entities ###
+
+ENTITIES are the backbone of the game. They perform the role of both invisible and visible (RenderEntity) game abstracts.
+
+Some example entities:
+    • A star
+    • A planet
+    • A ship
+    • An alien race
+    • A government
+    • An individual person
