@@ -2,10 +2,10 @@
 	Entities are objects that contain logic to be processed every time increment, as well as a unique ID.
 */
 class Entity {
-	constructor() {
+	constructor(pName) {
 
 		/* The entity's non-unique name */
-		this.name = "";
+		this.name = pName || "";
 
 		/* The entiy's class */
 		this.eClass = 'Blank';
@@ -20,10 +20,13 @@ class Entity {
 */
 
 class RenderEntity extends Entity {
-	constructor(pCoords, pRadius, pFillColor, pStrokeColor, pStrokeWidth) {
-		super();
+	constructor(pName, pCoords, pMass, pRadius, pFillColor, pStrokeColor, pStrokeWidth) {
+		super(pName);
 
 		this.canRender = true;
+
+		/* Entity's mass in kilograms */
+		this.mass = pMass;
 
 		/* Circle radius */
 		this.radius = pRadius; // radius of the entity in kilometers
@@ -41,13 +44,13 @@ class RenderEntity extends Entity {
 		this.strokeWidth = pStrokeWidth || 0;
 
 		/* x, y coordinates (points to center of circle) */
-		this.xPos = pCoords[0] || 0;
-		this.yPos = pCoords[1] || 0; // (0,0) points to center of Star System - the star itself, if unary star system
+		this.xPos = pCoords.xPos || 0; // (0,0) points to center of Star System - the star itself, if unary star system
+		this.yPos = pCoords.yPos || 0;
 
-		/* Star System this entity is located in */
-		this.starSystem = pCoords[2];
+		/* The Star System this entity is in */
+		this.system = pCoords.system;
 
 		// Register this visible entity to gameM
-		gameM.visibleEntity(this, pCoords[2]);
+		gameM.visibleEntity(this, pCoords.system);
 	}
 }

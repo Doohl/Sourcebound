@@ -32,7 +32,7 @@ class RenderManager {
 		renderM.cameraSpeed = 4; // default movement speed
 
 		/* Zoom factor of the player camera */
-		renderM.zoom = 1;
+		renderM.zoom = 0.000002;
 	}
 
 	/**
@@ -108,7 +108,7 @@ class RenderManager {
 				context.beginPath();
 				context.lineWidth = 1;
 				context.strokeStyle = '#717582';
-				context.ellipse(orbitX, orbitY, orbit.semimajorAxis * renderM.zoom, orbit.semiminorAxis * renderM.zoom, 0, 0, 2 * Math.PI);
+				context.ellipse(orbitX, orbitY, orbit.semimajorAxis * renderM.zoom, orbit.semiminorAxis * renderM.zoom, -orbit.omega, 0, 2 * Math.PI);
 				context.stroke();
 			}
 

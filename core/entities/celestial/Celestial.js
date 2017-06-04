@@ -1,6 +1,7 @@
 const G_CONSTANT = 6.67408e-11;
 const EARTH_YEAR = 3.154e+7; // seconds in an earth year
 const EARTH_DAY = 86400; // seconds in an earth day
+
 function NewtonApprox(max, previous, meanAnomaly, eccentricity, errorMargin) {
 	let ret = previous;
 	let retPrevious = previous;
@@ -14,44 +15,63 @@ function NewtonApprox(max, previous, meanAnomaly, eccentricity, errorMargin) {
 	return ret;
 }
 
+function rotatePoint(pPoint, xOrigin, yOrigin, pAngle) {
+	let sin = Math.sin(pAngle);
+	let cos = Math.cos(pAngle);
+
+	pPoint.xPos -= xOrigin;
+	pPoint.yPos -= yOrigin;
+
+	let xNew = pPoint.xPos * cos - pPoint.yPos * sin;
+	let yNew = pPoint.xPos * sin + pPoint.yPos * cos;
+
+	pPoint.xPos = xNew + xOrigin;
+	pPoint.yPos = yNew + yOrigin;
+	return pPoint;
+}
+
 /**
     A celestial body that has mass, an orbit and other geographic properties.
 */
 class Celestial extends RenderEntity {
-	constructor(pCoords, pRadius, pMass, pFillColor) {
-		super(pCoords, pRadius, pFillColor);
+	constructor(pProps, pFillColor) {
+		super(
+			pProps.name,
+			{'xPos': pProps.xPos, 'yPos': pProps.yPos, 'system': pProps.system},
+			pProps.mass, pProps.radius, pFillColor
+		);
 
-        /* Elementary physical properties */
-        this.mass = pMass || 0;  // mass in kilograms
+		if(pProps.orbit) {
+			this.makeOrbital(pProps.orbit);
+		}
 	}
 
     /*
         Turn this celestial into a 2D orbital
+		input [orbit] Properties:
+			- focus: the entity to orbit around
+			- periapsis: the closest distance to the focus (kilometers)
+			- apoapsis: the furthest distance to the focus (kilometers)
+			- omega: argument of periapsis, defines location of the periapsis relative to focus (radians)
+			- clockwise: define as true if orbit moves clockwise (false / undefined for counterclockwise)
     */
-    makeOrbital(focus, periapsis, apoapsis, clockwiseOrbit) {
-        if(!focus) return;
-
-		let orbit				= {};
-		orbit.focus				= focus;
-
-		// Orbital minimum and maximum
-		orbit.periapsis			= periapsis;
-		orbit.apoapsis			= apoapsis;
+	makeOrbital(orbit) {
+		if(!orbit) return;
 
 		// Eccentricity (e): description of ellipse [0, 1]
-		orbit.eccentricity 		= 1 - 2 / ((apoapsis/periapsis) + 1);
+		orbit.eccentricity 		= 1 - 2 / ((orbit.apoapsis / orbit.periapsis) + 1);
 
 		// Semimajor Axis (a): sum of the periapsis and apoapsis divided by two
-		orbit.semimajorAxis		= (periapsis + apoapsis) / 2;
+		orbit.semimajorAxis		= (orbit.periapsis + orbit.apoapsis) / 2;
 
 		// Semiminor Axis (b): square root of periapsis times apoapsis
-		orbit.semiminorAxis		= Math.sqrt(periapsis * apoapsis);
+		orbit.semiminorAxis		= Math.sqrt(orbit.periapsis * orbit.apoapsis);
 
-		// Orbital direction: true for clockwise, false for counterclockwise
-		orbit.clockwiseOrbit = clockwiseOrbit;
-
-		// Mean Angular Motion (n): s
-		orbit.meanAngularMotion	= Math.sqrt((G_CONSTANT * (this.mass + focus.mass)) / ((orbit.semimajorAxis * 1000) ** 3));
+		// Mean Angular Motion (n): function of the angular motion with respect to time
+		orbit.meanAngularMotion	= Math.sqrt((G_CONSTANT * (this.mass + orbit.focus.mass)) / ((orbit.semimajorAxis * 1000) ** 3));
+		if(!orbit.clockwise) {
+			orbit.meanAngularMotion *= -1; // flip the direction of travel if retrograde movement
+		}
 
 		this.orbit = orbit;
     }
@@ -62,9 +82,13 @@ class Celestial extends RenderEntity {
 	getOrbitalCenter() {
 		if(!this.orbit) return;
 
+		let x = this.orbit.focus.xPos - (this.orbit.eccentricity * this.orbit.semimajorAxis);
+		let y = this.orbit.focus.yPos;
+		let rotatedPoint = rotatePoint({'xPos': x, 'yPos': y}, this.orbit.focus.xPos, this.orbit.focus.yPos, -this.orbit.omega);
+
 		return {
-			'xPos': this.orbit.focus.xPos - (this.orbit.eccentricity * this.orbit.semimajorAxis),
-			'yPos': this.orbit.focus.yPos
+			'xPos': rotatedPoint.xPos,
+			'yPos': rotatedPoint.yPos
 		};
 	}
 
@@ -88,17 +112,10 @@ class Celestial extends RenderEntity {
 		}
 
 		// return the True Anomaly
-		if(this.orbit.clockwiseOrbit) {
-			return 2 * Math.atan2(
-				Math.sqrt(1 + this.orbit.eccentricity) * Math.sin(eccentricAnomaly / 2),
-				Math.sqrt(1 - this.orbit.eccentricity) * Math.cos(eccentricAnomaly / 2)
-			);
-		} else {
-			return 2 * Math.atan2(
-				Math.sqrt(1 - this.orbit.eccentricity) * Math.cos(eccentricAnomaly / 2),
-				Math.sqrt(1 + this.orbit.eccentricity) * Math.sin(eccentricAnomaly / 2)
-			);
-		}
+		return 2 * Math.atan2(
+			Math.sqrt(1 + this.orbit.eccentricity) * Math.sin(eccentricAnomaly / 2),
+			Math.sqrt(1 - this.orbit.eccentricity) * Math.cos(eccentricAnomaly / 2)
+		);
 	}
 
 	/**
@@ -113,10 +130,16 @@ class Celestial extends RenderEntity {
 		// Tangential velocity
 		const velocity = Math.sqrt(G_CONSTANT * (this.mass + this.orbit.focus.mass) * (this.orbit.semimajorAxis * 1000)) / distance;
 
+		let x = this.orbit.focus.xPos + (distance / 1000) * Math.cos(trueAnomaly); // convert from m to km
+		let y = this.orbit.focus.yPos + (distance / 1000) * Math.sin(trueAnomaly); // convert from m to km
+
+		let rotatedPoint = rotatePoint({'xPos': x, 'yPos': y}, this.orbit.focus.xPos, this.orbit.focus.yPos, -this.orbit.omega);
+
 		// return the final coordinates
 		return {
-			'xPos': this.orbit.focus.xPos + (distance / 1000) * Math.cos(trueAnomaly), // convert from m to km
-			'yPos': this.orbit.focus.yPos + (distance / 1000) * Math.sin(trueAnomaly), // convert from m to km
+			'xPos': rotatedPoint.xPos,
+			'yPos': rotatedPoint.yPos,
+			'trueAnomaly': trueAnomaly,
 			'velocity': velocity / 1000 // convert from m/s to km/s
 		};
 	}

@@ -38,21 +38,21 @@ class GameManager {
 		Make the entity visible; move it to a specified Star System
 			- pEntity must have `canRender` member set
 	*/
-	visibleEntity(pEntity, pStarSystem) {
-		if(pEntity === undefined || pEntity.ID === undefined || !pEntity.canRender || pStarSystem === undefined) return;
+	visibleEntity(pEntity, pSystem) {
+		if(pEntity === undefined || pEntity.ID === undefined || !pEntity.canRender || pSystem === undefined) return;
 
-		if(!gameM._renderEntities[pStarSystem]) {
-			gameM._renderEntities[pStarSystem] = [pEntity];
+		if(!gameM._renderEntities[pSystem]) {
+			gameM._renderEntities[pSystem] = [pEntity];
 		} else {
-			gameM._renderEntities[pStarSystem].push(pEntity);
+			gameM._renderEntities[pSystem].push(pEntity);
 		}
 	}
 
 	/**
 		Get the render entities of a specific star system
 	*/
-	getRenderEntities(pStarSystem) {
-		return gameM._renderEntities[pStarSystem];
+	getRenderEntities(pSystem) {
+		return gameM._renderEntities[pSystem];
 	}
 
 	/**
@@ -72,6 +72,7 @@ class GameManager {
 				let newCoords = entity.computeCoordinates(gameM.universeClock);
 				entity.xPos = newCoords.xPos;
 				entity.yPos = newCoords.yPos;
+				entity.orbitVelocity = newCoords.velocity;
 			}
 		}
 	}
