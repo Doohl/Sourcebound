@@ -100,6 +100,7 @@ class RenderManager {
 
 			// Draw the orbit before the entity itself
 			if(entity.orbit) {
+				context.globalCompositeOperation = 'destination-over';
 				let orbit = entity.orbit;
 				let orbitCenter = entity.getOrbitalCenter();
 				let orbitX = canvasCenterX + (orbitCenter.xPos - renderM.xPos) * renderM.zoom;
@@ -115,6 +116,8 @@ class RenderManager {
 			if(!drawRadius) {
 				continue;
 			}
+
+			context.globalCompositeOperation = 'source-over';
 
 			// Draw the entity circle
 			context.beginPath();

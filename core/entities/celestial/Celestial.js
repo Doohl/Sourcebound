@@ -41,6 +41,8 @@ class Celestial extends RenderEntity {
 			pProps.mass, pProps.radius, pFillColor
 		);
 
+		this.satellites = [];		// celestials directly orbiting this celestial
+
 		if(pProps.orbit) {
 			this.makeOrbital(pProps.orbit);
 		}
@@ -72,6 +74,8 @@ class Celestial extends RenderEntity {
 		if(!orbit.clockwise) {
 			orbit.meanAngularMotion *= -1; // flip the direction of travel if retrograde movement
 		}
+
+		orbit.focus.satellites.push(this);
 
 		this.orbit = orbit;
     }
