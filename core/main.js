@@ -6,18 +6,18 @@
 
 $(() => {
 
-	renderM.initiate();
-	inputM.initiate();
+	RenderM.initiate();
+	InputM.initiate();
 
-	gameM.viewingSystem = 'Sol';
+	GameM.viewingSystem = 'Sol';
 
 	SolSystem(); // generate the Sol System
 
-	gameM.paused = false;
-	gameM.increment = 86400;
+	GameM.paused = false;
+	GameM.increment = 86400;
 	setInterval(() => {
-		if(!gameM.paused) {
-			gameM.clockForward(gameM.increment / 66.667);
+		if(!GameM.paused) {
+			GameM.clockForward(GameM.increment / 66.667);
 		}
 	}, 15);
 });

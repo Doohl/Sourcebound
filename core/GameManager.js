@@ -5,25 +5,25 @@ var GameM; // static GameManager container
 */
 class GameManager {
 	constructor() {
-		gameM = this;
+		GameM = this;
 
 		/* When an entity is created, use this number as its ID-string and increment this value + 1 */
-		gameM._entityIncrement = 0;
+		GameM._entityIncrement = 0;
 
 		/* Container of all game entities indexed by their ID-strings */
-		gameM._gameEntities = {};
+		GameM._gameEntities = {};
 
 		/* Arrays containing game entities to render, indexed by Star System ID-strings */
-		gameM._renderEntities = {};
+		GameM._renderEntities = {};
 
 		/* The star system the player is currently viewing */
-		gameM.viewingSystem = "test";
+		GameM.viewingSystem = "test";
 
 		/* Entity the player is currently focused on / tracking */
-		gameM.target = undefined;
+		GameM.target = undefined;
 
 		/* How many seconds have gone by in the universe. in seconds */
-		gameM.universeClock = 0;
+		GameM.universeClock = 0;
 	}
 
 	/**
@@ -32,9 +32,9 @@ class GameManager {
 	addEntity(pEntity) {
 		if(pEntity === undefined) return;
 
-		pEntity.ID = (gameM._entityIncrement++).toString();
+		pEntity.ID = (GameM._entityIncrement++).toString();
 
-		gameM._gameEntities[pEntity.ID] = pEntity;
+		GameM._gameEntities[pEntity.ID] = pEntity;
 	}
 
 	/**
@@ -44,10 +44,10 @@ class GameManager {
 	visibleEntity(pEntity, pSystem) {
 		if(pEntity === undefined || pEntity.ID === undefined || !pEntity.canRender || pSystem === undefined) return;
 
-		if(!gameM._renderEntities[pSystem]) {
-			gameM._renderEntities[pSystem] = [pEntity];
+		if(!GameM._renderEntities[pSystem]) {
+			GameM._renderEntities[pSystem] = [pEntity];
 		} else {
-			gameM._renderEntities[pSystem].push(pEntity);
+			GameM._renderEntities[pSystem].push(pEntity);
 		}
 	}
 
@@ -55,7 +55,7 @@ class GameManager {
 		Get the render entities of a specific star system
 	*/
 	getRenderEntities(pSystem) {
-		return gameM._renderEntities[pSystem];
+		return GameM._renderEntities[pSystem];
 	}
 
 	/**
@@ -66,13 +66,13 @@ class GameManager {
 		Advance the clock by [time] seconds
 	*/
 	clockForward(time) {
-		gameM.universeClock += time;
-		for(let ID in gameM._gameEntities) {
-			let entity = gameM._gameEntities[ID];
+		GameM.universeClock += time;
+		for(let ID in GameM._gameEntities) {
+			let entity = GameM._gameEntities[ID];
 
 			// Advance orbit
 			if(entity.orbit) {
-				let newCoords = entity.computeCoordinates(gameM.universeClock);
+				let newCoords = entity.computeCoordinates(GameM.universeClock);
 				entity.xPos = newCoords.xPos;
 				entity.yPos = newCoords.yPos;
 				entity.orbitVelocity = newCoords.velocity;

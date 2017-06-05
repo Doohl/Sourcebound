@@ -1,7 +1,3 @@
-const G_CONSTANT = 6.67408e-11;
-const EARTH_YEAR = 3.154e+7; // seconds in an earth year
-const EARTH_DAY = 86400; // seconds in an earth day
-
 function NewtonApprox(max, previous, meanAnomaly, eccentricity, errorMargin) {
 	let ret = previous;
 	let retPrevious = previous;
@@ -15,21 +11,6 @@ function NewtonApprox(max, previous, meanAnomaly, eccentricity, errorMargin) {
 	return ret;
 }
 
-function rotatePoint(pPoint, xOrigin, yOrigin, pAngle) {
-	let sin = Math.sin(pAngle);
-	let cos = Math.cos(pAngle);
-
-	pPoint.xPos -= xOrigin;
-	pPoint.yPos -= yOrigin;
-
-	let xNew = pPoint.xPos * cos - pPoint.yPos * sin;
-	let yNew = pPoint.xPos * sin + pPoint.yPos * cos;
-
-	pPoint.xPos = xNew + xOrigin;
-	pPoint.yPos = yNew + yOrigin;
-	return pPoint;
-}
-
 /**
     A celestial body that has mass, an orbit and other geographic properties.
 */
@@ -41,7 +22,11 @@ class Celestial extends RenderEntity {
 			pProps.mass, pProps.radius, pFillColor
 		);
 
-		this.satellites = [];		// celestials directly orbiting this celestial
+		/* Natural satellites directly orbiting this celestial */
+		this.satellites = [];
+
+		/* Standard gravitational parameter */
+		this.standardGrav = Util.G_CONSTANT * this.mass;
 
 		if(pProps.orbit) {
 			this.makeOrbital(pProps.orbit);
@@ -69,8 +54,11 @@ class Celestial extends RenderEntity {
 		// Semiminor Axis (b): square root of periapsis times apoapsis
 		orbit.semiminorAxis		= Math.sqrt(orbit.periapsis * orbit.apoapsis);
 
+		// Sum of the standard gravitational parameters
+		orbit.standardGravTotal = this.standardGrav + orbit.focus.standardGrav;
+
 		// Mean Angular Motion (n): function of the angular motion with respect to time
-		orbit.meanAngularMotion	= Math.sqrt((G_CONSTANT * (this.mass + orbit.focus.mass)) / ((orbit.semimajorAxis * 1000) ** 3));
+		orbit.meanAngularMotion	= Math.sqrt(orbit.standardGravTotal / ((orbit.semimajorAxis * 1000) ** 3));
 		if(!orbit.clockwise) {
 			orbit.meanAngularMotion *= -1; // flip the direction of travel if retrograde movement
 		}
@@ -91,7 +79,7 @@ class Celestial extends RenderEntity {
 
 		let x = this.orbit.focus.xPos - (this.orbit.eccentricity * this.orbit.semimajorAxis);
 		let y = this.orbit.focus.yPos;
-		let rotatedPoint = rotatePoint({'xPos': x, 'yPos': y}, this.orbit.focus.xPos, this.orbit.focus.yPos, -this.orbit.omega);
+		let rotatedPoint = Util.rotatePoint({'xPos': x, 'yPos': y}, this.orbit.focus.xPos, this.orbit.focus.yPos, -this.orbit.omega);
 
 		return {
 			'xPos': rotatedPoint.xPos,
@@ -135,12 +123,12 @@ class Celestial extends RenderEntity {
 		const distance = (this.orbit.semimajorAxis * 1000) * ((1 - this.orbit.eccentricity**2) / (1 + this.orbit.eccentricity * Math.cos(trueAnomaly)));
 
 		// Tangential velocity
-		const velocity = Math.sqrt(G_CONSTANT * (this.mass + this.orbit.focus.mass) * (this.orbit.semimajorAxis * 1000)) / distance;
+		const velocity = Math.sqrt(this.orbit.standardGravTotal * (this.orbit.semimajorAxis * 1000)) / distance;
 
 		let x = this.orbit.focus.xPos + (distance / 1000) * Math.cos(trueAnomaly); // convert from m to km
 		let y = this.orbit.focus.yPos + (distance / 1000) * Math.sin(trueAnomaly); // convert from m to km
 
-		let rotatedPoint = rotatePoint({'xPos': x, 'yPos': y}, this.orbit.focus.xPos, this.orbit.focus.yPos, -this.orbit.omega);
+		let rotatedPoint = Util.rotatePoint({'xPos': x, 'yPos': y}, this.orbit.focus.xPos, this.orbit.focus.yPos, -this.orbit.omega);
 
 		// return the final coordinates
 		return {
@@ -155,6 +143,6 @@ class Celestial extends RenderEntity {
 		Focus the camera on the celestial when clicked on
 	*/
 	onClick(event) {
-		gameM.target = this;
+		GameM.target = this;
 	}
 }

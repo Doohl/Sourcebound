@@ -10,8 +10,8 @@ class Entity {
 		/* The entiy's class */
 		this.eClass = 'Blank';
 
-		// Register this entity to gameM
-		gameM.addEntity(this);
+		// Register this entity to GameM
+		GameM.addEntity(this);
 	}
 }
 
@@ -50,7 +50,7 @@ class RenderEntity extends Entity {
 		/* The Star System this entity is in */
 		this.system = pCoords.system;
 
-		// Register this visible entity to gameM
-		gameM.visibleEntity(this, pCoords.system);
+		// Register this visible entity to GameM
+		GameM.visibleEntity(this, pCoords.system);
 	}
 }

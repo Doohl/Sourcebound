@@ -5,3 +5,4 @@ To try out the game go to: https://doohl.github.io/Sourcebound/
 
 External dependencies and resources:
 * https://jquery.com/
+* https://github.com/jquery/jquery-mousewheel
