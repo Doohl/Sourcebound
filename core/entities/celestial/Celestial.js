@@ -75,6 +75,9 @@ class Celestial extends RenderEntity {
 			orbit.meanAngularMotion *= -1; // flip the direction of travel if retrograde movement
 		}
 
+		// Orbital period: time it takes to perform one orbit, in years
+		orbit.period = Math.sqrt( (orbit.semimajorAxis / 1.496e+8)**3 ); // convert a[km] to a[AU]
+
 		orbit.focus.satellites.push(this);
 
 		this.orbit = orbit;

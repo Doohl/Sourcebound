@@ -15,10 +15,11 @@ function SolSystem() {
         'system': 'Sol',
         'radius': 2439.7,
         'mass': 3.3011e+23,
+        'tilt': 0.0001745329,
         'orbit': {
             'focus': Sol,
-            'periapsis': 46001200,
-            'apoapsis': 69816900,
+            'periapsis': 46001195.642,
+            'apoapsis': 69816877.462,
             'omega': 1.3518700794
         }
     });
@@ -27,6 +28,7 @@ function SolSystem() {
         'system': 'Sol',
         'radius': 6051.8,
         'mass': 4.8675e+24,
+        'tilt': 3.0962141,
         'orbit': {
             'focus': Sol,
             'periapsis': 107477000,
@@ -70,7 +72,37 @@ function SolSystem() {
             'periapsis': 206700000,
             'apoapsis': 249200000,
             'omega': 5.86501907915
-        }
+        },
+        'hydrosphere': [
+            {
+                'type': 'h2o',
+                'local': 'polar',
+                'solid': 11         // 11% of surface covered in ice water (mostly localized to polar caps)
+            }
+        ],
+        'atmosphere': 0.00592154,   // atmospheric pressure in atm
+        'atmosphereComp': [
+            {
+                'type': 'co2',
+                'percent': 95.9
+            },
+            {
+                'type': 'ar',
+                'percent': 1.93
+            },
+            {
+                'type': 'n',
+                'percent': 1.89
+            },
+            {
+                'type': 'o2',
+                'percent': 0.146
+            },
+            {
+                'type': 'co',
+                'percent': 0.0557
+            }
+        ]
     });
         let Phobos = new Moon({
             'name': "Phobos",

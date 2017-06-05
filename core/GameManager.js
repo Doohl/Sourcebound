@@ -1,4 +1,4 @@
-var gameM; // static GameManager container
+var GameM; // static GameManager container
 
 /**
 	The main game manager, handles most logic and processing

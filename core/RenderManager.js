@@ -1,6 +1,6 @@
-var renderM; // static RenderManager container
+var RenderM; // static RenderManager container
 
-const MAX_ELLIPSE_SEMIMAJOR = 2206733; // ellipses should NEVER exceed this amount
+const MAX_ELLIPSE_SEMIMAJOR = 603367; // ellipses should NEVER exceed this amount
 
 /*
 	Turn screen coordinate into real coordinates
@@ -35,6 +35,7 @@ class RenderManager {
 
 		/* Zoom factor of the player camera */
 		renderM.zoom = 0.000002;
+
 	}
 
 	/**
@@ -51,7 +52,7 @@ class RenderManager {
 		renderM.resizeCanvas();
 
 		// The render loop (45 fps)
-		setInterval(renderM.renderFrame, 15);
+		setInterval(renderM.renderFrameCanvas2D, 15);
 	}
 
 	/**
@@ -60,7 +61,7 @@ class RenderManager {
 	resizeCanvas() {
 		renderM._canvas.width = window.innerWidth;
 		renderM._canvas.height = window.innerHeight;
-		renderM.renderFrame();
+		renderM.renderFrameCanvas2D();
 	}
 
 	/**
@@ -88,8 +89,9 @@ class RenderManager {
 
 	/**
 		Iterate through every RenderEntity in the currently-viewed Star System and render them.
+			- Powered by Canvas 2D
 	*/
-	renderFrame() {
+	renderFrameCanvas2D() {
 		// Clear the canvas
 		const context = renderM._context;
 		context.clearRect(0, 0, renderM._canvas.width, renderM._canvas.height);
