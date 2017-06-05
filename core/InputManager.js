@@ -61,17 +61,16 @@ class InputManager {
 			}
 		// Listen for mousewheel events
 		}).on('mousewheel', event => {
+			const oldReal = screenToReal({'x': inputM.mouseX, 'y': inputM.mouseY});
+
 			if(event.deltaY > 0) {
-				const oldReal = screenToReal({'x': inputM.mouseX, 'y': inputM.mouseY});
 				inputM.zoomIn(1.25);
-				const curReal = screenToReal({'x': inputM.mouseX, 'y': inputM.mouseY});
-				const xDiff = oldReal.x - curReal.x;
-				const yDiff = oldReal.y - curReal.y;
-				renderM.xPos += xDiff;
-				renderM.yPos += yDiff;
 			} else if(event.deltaY < 0) {
-				const oldReal = screenToReal({'x': inputM.mouseX, 'y': inputM.mouseY});
 				inputM.zoomOut(1.25);
+			}
+
+			// If the player has no target, center the zoom around their cursor
+			if(!gameM.target) {
 				const curReal = screenToReal({'x': inputM.mouseX, 'y': inputM.mouseY});
 				const xDiff = oldReal.x - curReal.x;
 				const yDiff = oldReal.y - curReal.y;
@@ -81,19 +80,49 @@ class InputManager {
 		// Listen for mouse events
 		}).mousedown(event => {
 			inputM.holdingMouse = true;
+			inputM.mouseMoved = false;
+
 		}).mousemove(event => {
 			if(inputM.holdingMouse && inputM.mouseX !== undefined && inputM.mouseY !== undefined) {
 				const oldReal = screenToReal({'x': inputM.mouseX, 'y': inputM.mouseY});
 				const curReal = screenToReal({'x': event.pageX, 'y': event.pageY});
 				const xDiff = oldReal.x - curReal.x;
 				const yDiff = oldReal.y - curReal.y;
-				renderM.xPos += xDiff;
-				renderM.yPos += yDiff;
+				renderM.moveCameraPos(xDiff, yDiff);
 			}
+			inputM.mouseMoved = true;
 			inputM.mouseX = event.pageX;
 			inputM.mouseY = event.pageY;
 		}).mouseup(event => {
 			inputM.holdingMouse = false;
+
+			// If the mouse hasn't moved, assume a normal click was done
+			if(!inputM.mouseMoved) {
+				const canvasCenterX = renderM._canvas.width / 2;
+				const canvasCenterY = renderM._canvas.height / 2;
+				const thisSystem = gameM.getRenderEntities(gameM.viewingSystem);
+
+				let mouseRange = [];
+
+				for(let entity of thisSystem) {
+					let drawX = canvasCenterX + (entity.xPos - renderM.xPos) * renderM.zoom;
+					let drawY = canvasCenterY + (entity.yPos - renderM.yPos) * renderM.zoom;
+					let distance = Math.sqrt((drawX - event.pageX)**2 + (drawY - event.pageY)**2);
+					let drawRadius = Math.max(entity.minRadius, entity.radius * renderM.zoom);
+					if(distance <= drawRadius) {
+						mouseRange.push(entity);
+					}
+				}
+
+				let clickedOn = mouseRange[0];
+
+				// Found an entity to click on
+				if(clickedOn && clickedOn['onClick']) {
+					clickedOn.onClick(event);
+				}
+			}
+			inputM.mouseMoved = false;
+
 		});
 	}
 
@@ -101,7 +130,10 @@ class InputManager {
 		Move every 5ms if keys are being pressed
 	*/
 	movementLoop() {
-		if(inputM.movementInterval) {
+		if(inputM.movementInterval || (
+			!inputM.keysHolding['north'] && !inputM.keysHolding['south'] &&
+			!inputM.keysHolding['east'] && !inputM.keysHolding['west'])
+		) {
 			return;
 		}
 		inputM.movementInterval = setInterval(() => {
@@ -142,7 +174,6 @@ class InputManager {
 		if(renderM.zoom > 1) {
 			renderM.zoom = 1;
 		}
-		console.log("zoom factor: " + renderM.zoom);
 	}
 
 	/**
@@ -151,7 +182,6 @@ class InputManager {
 	zoomOut(factor) {
 		factor = factor || 1.5;
 		renderM.zoom /= factor;
-		console.log("zoom factor: " + renderM.zoom);
 	}
 
 	pauseToggle() {

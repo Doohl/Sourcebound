@@ -13,10 +13,11 @@ $(() => {
 
 	SolSystem(); // generate the Sol System
 
-	gameM.paused = true;
+	gameM.paused = false;
+	gameM.increment = 86400;
 	setInterval(() => {
 		if(!gameM.paused) {
-			gameM.clockForward(1296000 / 66.667);
+			gameM.clockForward(gameM.increment / 66.667);
 		}
 	}, 15);
 });

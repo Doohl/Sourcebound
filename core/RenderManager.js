@@ -1,5 +1,7 @@
 var renderM; // static RenderManager container
 
+const MAX_ELLIPSE_SEMIMAJOR = 2206733; // ellipses should NEVER exceed this amount
+
 /*
 	Turn screen coordinate into real coordinates
 */
@@ -72,6 +74,16 @@ class RenderManager {
 		let speed = renderM.cameraSpeed / renderM.zoom;
 		renderM.xPos += dir.x * speed;
 		renderM.yPos += dir.y * speed;
+		gameM.target = undefined; // camera movement deselects target
+	}
+
+	/**
+		Move the camera by exact x/y offsets
+	*/
+	moveCameraPos(xOff, yOff) {
+		renderM.xPos += xOff;
+		renderM.yPos += yOff;
+		gameM.target = undefined; // camera movement deselects target
 	}
 
 	/**
@@ -90,6 +102,12 @@ class RenderManager {
 		const canvasCenterX = renderM._canvas.width / 2;
 		const canvasCenterY = renderM._canvas.height / 2;
 
+		// Center on the target every frame - if we have one
+		if(gameM.target) {
+			renderM.xPos = gameM.target.xPos;
+			renderM.yPos = gameM.target.yPos;
+		}
+
 		for(let i = 0, len = renderEntities.length; i < len; i++) {
 			let entity = renderEntities[i];
 
@@ -106,11 +124,17 @@ class RenderManager {
 				let orbitX = canvasCenterX + (orbitCenter.xPos - renderM.xPos) * renderM.zoom;
 				let orbitY = canvasCenterY + (orbitCenter.yPos - renderM.yPos) * renderM.zoom;
 
-				context.beginPath();
-				context.lineWidth = 1;
-				context.strokeStyle = '#717582';
-				context.ellipse(orbitX, orbitY, orbit.semimajorAxis * renderM.zoom, orbit.semiminorAxis * renderM.zoom, -orbit.omega, 0, 2 * Math.PI);
-				context.stroke();
+				// prevent javascript from trying to draw ulta-large ellipses
+				let orbitAlpha = 1 - (orbit.semimajorAxis * renderM.zoom) / MAX_ELLIPSE_SEMIMAJOR;
+				if(orbitAlpha >= 0.99) {
+					orbitAlpha = 1;
+				}
+				if(orbitAlpha > 0) {
+					context.beginPath();
+					context.strokeStyle = 'rgba(113,117,130,' + orbitAlpha + ')';
+					context.ellipse(orbitX, orbitY, orbit.semimajorAxis * renderM.zoom, orbit.semiminorAxis * renderM.zoom, -orbit.omega, 0, 2 * Math.PI);
+					context.stroke();
+				}
 			}
 
 			if(!drawRadius) {
@@ -133,7 +157,7 @@ class RenderManager {
 			// Draw the entity's name
 			if((drawRadius > 2.2 || renderM.zoom >= 0.0001) && entity.name) {
 				context.textAlign = 'center';
-				context.font = '13px Arial';
+				context.font = '12px monospace';
 				context.fillText(entity.name, drawX, (drawY + drawRadius * 1.1) + 10);
 			}
 		}

@@ -147,4 +147,11 @@ class Celestial extends RenderEntity {
 			'velocity': velocity / 1000 // convert from m/s to km/s
 		};
 	}
+
+	/**
+		Focus the camera on the celestial when clicked on
+	*/
+	onClick(event) {
+		gameM.target = this;
+	}
 }

@@ -19,6 +19,9 @@ class GameManager {
 		/* The star system the player is currently viewing */
 		gameM.viewingSystem = "test";
 
+		/* Entity the player is currently focused on / tracking */
+		gameM.target = undefined;
+
 		/* How many seconds have gone by in the universe. in seconds */
 		gameM.universeClock = 0;
 	}
