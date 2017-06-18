@@ -34,6 +34,9 @@ class RenderManager {
 		/* Zoom factor of the player camera */
 		RenderM.zoom = 0.000002;
 
+		/* The selected render method */
+		RenderM.renderMethod = 'Canvas2D';
+
 	}
 
 	/**
@@ -49,8 +52,12 @@ class RenderManager {
 
 		RenderM.resizeCanvas();
 
-		// The render loop (45 fps)
-		setInterval(RenderM.renderFrameCanvas2D, 15);
+		// The render loop (60 fps)
+		if(RenderM.renderMethod) {
+			setInterval(RenderM.renderFrameCanvas2D, 16);
+		} else {
+			setInterval(RenderM.renderFrameWebGL, 16);
+		}
 	}
 
 	/**
@@ -128,6 +135,9 @@ class RenderManager {
 				let orbitAlpha = 1 - (orbit.semimajorAxis * RenderM.zoom) / Util.MAX_ELLIPSE_SEMIMAJOR;
 				if(orbitAlpha >= 0.99) {
 					orbitAlpha = 1;
+				}
+				if(entity.eClass === 'Comet') {
+					orbitAlpha /= 3;
 				}
 				if(orbitAlpha > 0) {
 					context.beginPath();

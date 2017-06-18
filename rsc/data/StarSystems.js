@@ -1,12 +1,169 @@
-/**
- * Pre-defined, important star systems go here
- */
+const PARSEC_3D = 7.1404247561181866209600499495178;
+
+/*
+    List of real star systems near Sol
+        - Distances are to be multiplied by the PARSEC_3D constant to convert to lightyears.
+         This is done to preserve real distances in a 2D representation of the neighboring stars.
+
+    Stars have the following properties:
+        - stellarClass          : exact Stellar Classification of this star
+        - colorIndex            : the B-V color index
+        - absoluteMagnitude     : the star's absolute magnitude
+        - mass                  : star's mass in solar masses
+        - radius                : star's radius in solar radii
+        - temperature           : star's temperature in [K]
+        - luminosity            : star's luminosity in solar luminosity
+        - age                   : star's age in [Gy] (billion years)
+        - x/y                   : distances from Sol in a unitless metric (most closely a parsec) to be converted to lightyears
+        - binary                : if defined, sets this star as an orbital of an existing star
+
+    * If any values are left 'undefined' the system will attempt to generate / extrapolate values that best fit the
+    supplied properties.
+*/
+const INTERSTELLAR_MAP = {
+    'Sol': {
+        'stellarClass'          : 'G2V',
+        'colorIndex'            : ''
+    },
+    'Proxima Centauri': {
+        'stellarClass'          : 'M6Ve',
+        'colorIndex'            : 1.82,
+        'absoluteMagnitude'     : 15.60,
+        'mass'                  : 0.123,
+        'radius'                : 0.141,
+        'temperature'           : 3042,
+        'luminosity'            : 0.0017,
+        'age'                   : 4.85,
+        'x'                     : -0.47175,
+        'y'                     : 0.36132
+    },
+    'Alpha Centauri-A': {
+        'stellarClass'          : 'G2V',
+        'colorIndex'            : 0.71,
+        'absoluteMagnitude'     : 4.38,
+        'mass'                  : 1.100,
+        'radius'                : 1.227,
+        'luminosity'            : 1.519,
+        'temperature'           : 5790,
+        'age'                   : 4.4,
+        'x'                     : -0.50362,
+        'y'                     : 0.42139,
+    },
+    'Alpha Centauri-B': {
+        'stellarClass'          : 'K1V',
+        'colorIndex'            : 0.88,
+        'absoluteMagnitude'     : 5.71,
+        'mass'                  : 0.907,
+        'radius'                : 0.865,
+        'luminosity'            : 0.5002,
+        'temperature'           : 5260,
+        'age'                   : 6.5,
+        'x'                     : -0.50359,
+        'y'                     : 0.42128,
+        'binary': {
+            'primary'           : 'Alpha Centauri-A',
+            'system'            : 'Alpha Centauri',
+            'periapsis'         : 1803054000,
+            'apoapsis'          : 5676946000,
+            'omega'             : 4.04305521,
+            'epoch'             : 5.917e+10
+        }
+    },
+    "Barnard's Star": {
+        'stellarClass'          : 'M4.0V',
+        'colorIndex'            : 1.713,
+        'absoluteMagnitude'     : 13.21,
+        'mass'                  : 0.144,
+        'radius'                : 0.865,
+        'luminosity'            : 0.0035,
+        'temperature'           : 3134,
+        'age'                   : 10,
+        'x'                     : -0.01729,
+        'y'                     : 1.81533
+    },
+    'Wolf 359': {
+        'stellarClass'          : 'M6.5Ve',
+        'colorIndex'            : 2.034,
+        'absoluteMagnitude'     : 16.65,
+        'mass'                  : 0.09,
+        'radius'                : 0.16,
+        'luminosity'            : 0.0014,
+        'temperature'           : 2800,
+        'age'                   : 0.250,
+        'x'                     : -2.28262,
+        'y'                     : -0.64697
+    },
+    'Lalande 21185': {
+        'stellarClass'          : 'M2V',
+        'colorIndex'            : 1.444,
+        'absoluteMagnitude'     : 10.48,
+        'mass'                  : 0.46,
+        'radius'                : 0.393,
+        'luminosity'            : 0.021,
+        'temperature'           : 3828,
+        'age'                   : 8.2,
+        'x'                     : -1.9995,
+        'y'                     : 0.50462
+    },
+
+    'Gliese 65-A': {
+        'stellarClass'          : 'M5.5V',
+        'colorIndex'            : 1.87,
+        'absoluteMagnitude'     : 15.47291438,
+        'mass'                  : 0.102,
+        'radius'                : 0.14,
+        'luminosity'            : 0.00006,
+        'temperature'           : 2670,
+        'age'                   : 0.844,
+        'x'                     : 2.27003,
+        'y'                     : -1.04443,
+        'binary': {
+            'partner'           : 'Gliese 65-B',
+            'system'            : 'Gliese 65'
+        }
+    },
+    'Gliese 65-B': {
+        'stellarClass'          : 'M6V',
+        'colorIndex'            : undefined,
+        'absoluteMagnitude'     : 15.60291438,
+        'mass'                  : 0.100,
+        'radius'                : 0.14,
+        'luminosity'            : 0.00004,
+        'temperature'           : 2650,
+        'age'                   : 0.72,
+        'x'                     : 2.27003,
+        'y'                     : -1.04443,
+        'binary': {
+            'partner'           : 'Gliese 65-A',
+            'system'            : 'Gliese 65'
+        }
+    },
+    'Sirius C': {
+        'stellarClass'          : 'M6V',
+        'colorIndex'            : undefined,
+        'absoluteMagnitude'     : 15.60291438,
+        'mass'                  : 0.100,
+        'radius'                : 0.14,
+        'luminosity'            : 0.00004,
+        'temperature'           : 2650,
+        'age'                   : 0.72,
+        'x'                     : 2.27003,
+        'y'                     : -1.04443,
+        'binary': {
+            'partner'           : 'Gliese 65-A',
+            'system'            : 'Gliese 65'
+        }
+    },
+};
+
+
 function SolSystem() {
     let Sol = new Star({
         'name': "Sol",
         'system': 'Sol',
         'radius': 695700,
-        'mass': 1.98855e+30
+        'mass': 1.98855e+30,
+        'stellarClass': 'G'
     });
 
     // Main planets and their moons
@@ -20,7 +177,8 @@ function SolSystem() {
             'focus': Sol,
             'periapsis': 46001195.642,
             'apoapsis': 69816877.462,
-            'omega': 1.3518700794
+            'omega': 1.3518700794,
+            'epochAnomaly': 3.072
         }
     });
     let Venus = new Planet({
@@ -33,7 +191,8 @@ function SolSystem() {
             'focus': Sol,
             'periapsis': 107477000,
             'apoapsis': 108939000,
-            'omega': 2.29568357595
+            'omega': 2.29568357595,
+            'epochAnomaly': 0.8811
         }
     });
 
@@ -46,7 +205,8 @@ function SolSystem() {
             'focus': Sol,
             'periapsis': 147100000,
             'apoapsis': 152100000,
-            'omega': 5.028293
+            'omega': 1.7967674,
+            'epochAnomaly': 6.25
         }
     });
         let Luna = new Moon({
@@ -58,7 +218,8 @@ function SolSystem() {
                 'focus': Earth,
                 'periapsis': 362600,
                 'apoapsis': 405400,
-                'omega': 5.5528
+                'omega': 5.5528,
+                'epochAnomaly': 2.266
             }
         });
 
@@ -71,7 +232,8 @@ function SolSystem() {
             'focus': Sol,
             'periapsis': 206700000,
             'apoapsis': 249200000,
-            'omega': 5.86501907915
+            'omega': 5.86501907915,
+            'epochAnomaly': 0.4056
         },
         'hydrosphere': [
             {
@@ -687,7 +849,7 @@ function SolSystem() {
                 'focus': Saturn,
                 'periapsis': 8.463e+6,
                 'apoapsis': 2.515e+7,
-                'omega': 0.1062
+                'omega': -0.8062
             }
         });
 
@@ -944,7 +1106,7 @@ function SolSystem() {
             'focus': Sol,
             'periapsis': 4.45951e+9,
             'apoapsis': 4.5373e+9,
-            'omega': -1.514079
+            'omega': 0.7848981
         }
     });
         let Naiad = new Moon({
@@ -1168,7 +1330,7 @@ function SolSystem() {
             'focus': Sol,
             'periapsis': 4.436774e+9,
             'apoapsis': 7.375923e+9,
-            'omega': 1.97
+            'omega': 3.89
         }
     });
         let Charon = new Moon({
@@ -1216,7 +1378,7 @@ function SolSystem() {
                 'focus': Pluto,
                 'periapsis': 59000,
                 'apoapsis': 59000,
-                'omega': 0
+                'omega': -0.55
             }
         });
         let Styx = new Moon({
@@ -1228,7 +1390,7 @@ function SolSystem() {
                 'focus': Pluto,
                 'periapsis': 46670,
                 'apoapsis': 46670,
-                'omega': 0
+                'omega': 0.2
             }
         });
 
@@ -1272,7 +1434,7 @@ function SolSystem() {
 
     // Comets
     let HalleysComet = new Comet({
-        'name': "Halley's Comet",
+        'name': "Comet: Halley",
         'system': 'Sol',
         'radius': 5.5,
         'mass': 2.2e+14,
@@ -1280,7 +1442,21 @@ function SolSystem() {
             'focus': Sol,
             'periapsis': 87664352,
             'apoapsis': 5.24789e+9,
-            'omega': 1.94307506
+            'omega': 1.94307506,
+            'epochAnomaly': 2.981
+        }
+    });
+    let Arrest6P = new Comet({
+        'name': "Comet: d'Arrest",
+        'system': 'Sol',
+        'radius': 12,
+        'mass': 4.97e+14,
+        'orbit': {
+            'focus': Sol,
+            'periapsis': 2.02406e+8,
+            'apoapsis': 8.43283e+8,
+            'omega': -0.0024,
+            'epochAnomaly': 3.51098897
         }
     });
 }

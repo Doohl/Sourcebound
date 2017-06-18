@@ -39,8 +39,9 @@ class Celestial extends RenderEntity {
 			- focus: the entity to orbit around
 			- periapsis: the closest distance to the focus (kilometers)
 			- apoapsis: the furthest distance to the focus (kilometers)
-			- omega: argument of periapsis, defines location of the periapsis relative to focus (radians)
+			- omega: longitude of periapsis, defines location of the periapsis relative to focus (radians)
 			- clockwise: define as true if orbit moves clockwise (false / undefined for counterclockwise)
+			- epochAnomaly: the true anomaly of this celestial at the J2000 epoch
     */
 	makeOrbital(orbit) {
 		if(!orbit) return;
@@ -65,6 +66,8 @@ class Celestial extends RenderEntity {
 
 		// Orbital period: time it takes to perform one orbit, in years
 		orbit.period = Math.sqrt( (orbit.semimajorAxis / 1.496e+8)**3 ); // convert a[km] to a[AU]
+
+		orbit.epochAnomaly = orbit.epochAnomaly || 0;
 
 		orbit.focus.satellites.push(this);
 
@@ -140,9 +143,40 @@ class Celestial extends RenderEntity {
 	}
 
 	/**
+		Computer the (x, y) coordinates of this celestial at a given [angle] in radians
+	*/
+	computeCoordinatesAngle(angle) {
+		if(!this.orbit) return;
+
+		const distance = (this.orbit.semimajorAxis * 1000) * ((1 - this.orbit.eccentricity**2) / (1 + this.orbit.eccentricity * Math.cos(angle)));
+
+		// Tangential velocity
+		const velocity = Math.sqrt(this.orbit.standardGravTotal * (this.orbit.semimajorAxis * 1000)) / distance;
+
+		let x = this.orbit.focus.xPos + (distance / 1000) * Math.cos(angle); // convert from m to km
+		let y = this.orbit.focus.yPos + (distance / 1000) * Math.sin(angle); // convert from m to km
+
+		let rotatedPoint = Util.rotatePoint({'xPos': x, 'yPos': y}, this.orbit.focus.xPos, this.orbit.focus.yPos, -this.orbit.omega);
+
+		// return the final coordinates
+		return {
+			'xPos': rotatedPoint.xPos,
+			'yPos': rotatedPoint.yPos,
+			'velocity': velocity / 1000 // convert from m/s to km/s
+		};
+	}
+
+	/**
 		Focus the camera on the celestial when clicked on
 	*/
 	onClick(event) {
 		GameM.target = this;
+		let targetVel = Math.sqrt(this.standardGrav / (this.radius * 1000) + 150000)/1000;
+		var travelTime = GameM.travelTime(
+			{'xPos': RenderM.xPos, 'yPos': RenderM.yPos},
+			this,
+			0, 4000, targetVel, 2 * 0.00980665
+		);
+		// Look for orbit
 	}
 }

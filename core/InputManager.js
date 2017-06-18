@@ -22,12 +22,13 @@ class InputManager {
 
 		/* A list of keys and their respective commands */
 		InputM.keyMap = {
-			'west': [65, 37],
-			'east': [68, 39],
-			'north': [87, 38],
-			'south': [83, 40],
-			'pauseToggle': [107],
-			'zoomOut': [109]
+			'west'				: [65, 37],		// [a, left]
+			'east'				: [68, 39],		// [d, right]
+			'north'				: [87, 38],		// [w, up]
+			'south'				: [83, 40],		// [s, down]
+			'pauseToggle'		: [107],		// [numpad +]
+			'zoomOut'			: [109],		// [numpad -]
+			'test'				: [84] 			// [T] - debug key, remove
 		};
 	}
 
@@ -73,8 +74,8 @@ class InputManager {
 			if(!GameM.target) {
 				const curReal = screenToReal({'x': InputM.mouseX, 'y': InputM.mouseY});
 				const xDiff = oldReal.x - curReal.x;
-				const yDiff = oldReal.y - curReal.y;
 				RenderM.xPos += xDiff;
+				const yDiff = oldReal.y - curReal.y;
 				RenderM.yPos += yDiff;
 			}
 		// Listen for mouse events
@@ -186,6 +187,10 @@ class InputManager {
 
 	pauseToggle() {
 		GameM.paused = !GameM.paused;
+	}
+
+	/* Debug key */
+	test() {
 	}
 }
 InputM = new InputManager();

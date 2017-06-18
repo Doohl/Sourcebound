@@ -12,12 +12,14 @@ $(() => {
 	GameM.viewingSystem = 'Sol';
 
 	SolSystem(); // generate the Sol System
+	GenerateSystem('test'); // generate a random system
 
-	GameM.paused = false;
-	GameM.increment = 86400;
+	GameM.paused = true;
+	GameM.increment = Util.EARTH_DAY * 60;
+	GameM.clockSet(0);
 	setInterval(() => {
 		if(!GameM.paused) {
-			GameM.clockForward(GameM.increment / 66.667);
+			GameM.clockForward(Math.round(GameM.increment / 66.666666666666666666666666666667));
 		}
 	}, 15);
 });
