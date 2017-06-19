@@ -103,8 +103,10 @@ class Celestial extends RenderEntity {
 		let eccentricAnomaly;
 
 		// Orbits of e>0.8, initial value of pi is used
-		if(this.orbit.eccentricity > 0.8) {
-			eccentricAnomaly = NewtonApprox(150, Math.PI, meanAnomaly, this.orbit.eccentricity, 10e-15);
+		if(this.orbit.eccentricity > 0.9) {
+			eccentricAnomaly = NewtonApprox(1000, Math.PI, meanAnomaly, this.orbit.eccentricity, 10e-15);
+		} else if(this.orbit.eccentricity > 0.8) {
+			eccentricAnomaly = NewtonApprox(500, Math.PI, meanAnomaly, this.orbit.eccentricity, 10e-15);
 		} else {
 			eccentricAnomaly = NewtonApprox(150, meanAnomaly, meanAnomaly, this.orbit.eccentricity, 10e-15);
 		}
