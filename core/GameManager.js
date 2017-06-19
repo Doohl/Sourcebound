@@ -25,7 +25,7 @@ class GameManager {
 		/* Entity the player is currently focused on / tracking */
 		GameM.target = undefined;
 
-		/* How many seconds have gone by in the universe. in seconds */
+		/* The number of seconds that have passed since the J2000 Epoch */
 		GameM.universeClock = 0;
 	}
 

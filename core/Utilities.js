@@ -18,6 +18,9 @@ class Utilities {
         Util.G_CONSTANT = 6.67408e-11;  // gravitational constant [m^3 kg^-1 s^-2]
         Util.EARTH_YEAR = 3.154e+7;     // seconds in an earth year
         Util.EARTH_DAY = 86400;         // seconds in an earth day
+
+		// Number of milliseconds between the Unix epoch and J2000 Epoch
+		Util.J2000_UNIX = Date.parse('Sat, 01 Jan 2000 12:00:00 GMT');
 	}
 
     /**
@@ -81,6 +84,14 @@ class Utilities {
 		return c*t/d + b;
 	}
 
+	/**
+		Gets a string representation of the current universe clock
+	*/
+	getStringDate(time) {
+		let currentDate = new Date();
+		currentDate.setTime(Util.J2000_UNIX + (time * 1000)); // convert seconds to milliseconds
+		return currentDate.toString();
+	}
 }
 
 new Utilities();

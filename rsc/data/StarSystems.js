@@ -178,7 +178,7 @@ function SolSystem() {
             'periapsis': 46001195.642,
             'apoapsis': 69816877.462,
             'omega': 1.3518700794,
-            'epochAnomaly': 3.072
+            'epochAnomaly': 3.051
         }
     });
     let Venus = new Planet({
@@ -192,7 +192,7 @@ function SolSystem() {
             'periapsis': 107477000,
             'apoapsis': 108939000,
             'omega': 2.29568357595,
-            'epochAnomaly': 0.8811
+            'epochAnomaly': 0.8753
         }
     });
 
@@ -206,7 +206,7 @@ function SolSystem() {
             'periapsis': 147100000,
             'apoapsis': 152100000,
             'omega': 1.7967674,
-            'epochAnomaly': 6.25
+            'epochAnomaly': 6.254
         }
     });
         let Luna = new Moon({
@@ -219,7 +219,7 @@ function SolSystem() {
                 'periapsis': 362600,
                 'apoapsis': 405400,
                 'omega': 5.5528,
-                'epochAnomaly': 2.266
+                'epochAnomaly': 2.215
             }
         });
 
@@ -233,7 +233,7 @@ function SolSystem() {
             'periapsis': 206700000,
             'apoapsis': 249200000,
             'omega': 5.86501907915,
-            'epochAnomaly': 0.4056
+            'epochAnomaly': 0.338
         },
         'hydrosphere': [
             {
@@ -300,7 +300,8 @@ function SolSystem() {
             'focus': Sol,
             'periapsis': 740552843,
             'apoapsis': 816044416,
-            'omega': -1.4975326
+            'omega': 0.2575033,
+            'epochAnomaly': 0.3474
         }
     });
         let Io = new Moon({
@@ -559,7 +560,8 @@ function SolSystem() {
             'focus': Sol,
             'periapsis': 1.34997e+9,
             'apoapsis': 1508844124,
-            'omega': -0.37146,
+            'omega': 1.613242,
+            'epochAnomaly': 5.532
         }
     });
         let Pan = new Moon({
@@ -862,7 +864,8 @@ function SolSystem() {
             'focus': Sol,
             'periapsis': 2.74213e+9,
             'apoapsis': 3.00841e+9,
-            'omega': 1.688333
+            'omega': 2.9838889,
+            'epochAnomaly': 2.462
         }
     });
         let Cordelia = new Moon({
@@ -1106,7 +1109,8 @@ function SolSystem() {
             'focus': Sol,
             'periapsis': 4.45951e+9,
             'apoapsis': 4.5373e+9,
-            'omega': 0.7848981
+            'omega': 0.7848981,
+            'epochAnomaly': 4.471
         }
     });
         let Naiad = new Moon({
@@ -1280,7 +1284,8 @@ function SolSystem() {
             'focus': Sol,
             'periapsis': 382620000,
             'apoapsis': 414010000,
-            'omega': 1.276721
+            'omega': 1.276721,
+            'epochAnomaly': 0.1194
         }
     });
 
@@ -1293,7 +1298,8 @@ function SolSystem() {
             'focus': Sol,
             'periapsis': 5.228745e+9,
             'apoapsis': 7.701747e+9,
-            'omega': 4.1826
+            'omega': 4.1826,
+            'epochAnomaly': 3.331
         }
     });
         let Hiiaka = new Moon({
@@ -1330,7 +1336,8 @@ function SolSystem() {
             'focus': Sol,
             'periapsis': 4.436774e+9,
             'apoapsis': 7.375923e+9,
-            'omega': 3.89
+            'omega': 3.89,
+            'epochAnomaly': 0.2617
         }
     });
         let Charon = new Moon({
@@ -1403,7 +1410,8 @@ function SolSystem() {
             'focus': Sol,
             'periapsis': 5.77298e+9,
             'apoapsis': 7.90475e+9,
-            'omega': 5.1818
+            'omega': 5.1818,
+            'epochAnomaly': 2.433
         }
     });
 
@@ -1416,7 +1424,8 @@ function SolSystem() {
             'focus': Sol,
             'periapsis': 5.723e+9,
             'apoapsis': 14.602e+9,
-            'omega': 2.6389
+            'omega': 2.6389,
+            'epochAnomaly': 3.389
         }
     });
         let Dysnomia = new Moon({

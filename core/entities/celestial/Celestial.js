@@ -41,7 +41,7 @@ class Celestial extends RenderEntity {
 			- apoapsis: the furthest distance to the focus (kilometers)
 			- omega: longitude of periapsis, defines location of the periapsis relative to focus (radians)
 			- clockwise: define as true if orbit moves clockwise (false / undefined for counterclockwise)
-			- epochAnomaly: the true anomaly of this celestial at the J2000 epoch
+			- epochAnomaly: the mean anomaly of this celestial at the J2000 epoch
     */
 	makeOrbital(orbit) {
 		if(!orbit) return;
@@ -97,7 +97,7 @@ class Celestial extends RenderEntity {
 		if(!this.orbit) return; // must be an orbital
 
 		// Mean Anomaly (M): mean angular motion times [time]
-		const meanAnomaly = this.orbit.meanAngularMotion * time;
+		const meanAnomaly = (this.orbit.meanAngularMotion * time) - this.orbit.epochAnomaly;
 
 		// Eccentric Anomaly (E): angular parameter that defines position of celestial along orbit
 		let eccentricAnomaly;
