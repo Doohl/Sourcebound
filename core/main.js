@@ -15,7 +15,7 @@ $(() => {
 	GenerateSystem('test'); // generate a random system
 
 	GameM.paused = true;
-	GameM.increment = Util.EARTH_DAY * 20;
+	GameM.increment = Util.EARTH_DAY;
 	GameM.clockSet(0);
 	setInterval(() => {
 		if(!GameM.paused) {

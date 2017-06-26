@@ -78,7 +78,11 @@ class GameManager {
 				let newCoords = entity.computeCoordinates(GameM.universeClock);
 				entity.xPos = newCoords.xPos;
 				entity.yPos = newCoords.yPos;
-				entity.orbitVelocity = newCoords.velocity;
+			}
+
+			// Check for flight solutions
+			if(entity.flightSolution) {
+				entity.flightSolution(time);
 			}
 		}
 	}
@@ -89,79 +93,11 @@ class GameManager {
 	}
 
 	/**
-		Rough estimate of time needed to reach entity B from entity A.
-			- entityA: starting entity / location
-			- entityB: ending entity / location
-			- initialVel: velocity to start with
-			- maximumVel: maximum cruising velocity
-			- stopVel: velocity to stop at
-			- acceleration: entity's acceleration / deceleration factor
-		Returns:
-		{
-			'time': total trip time
-			'dist': distance travelled
-			'velocity': final recorded velocity
-			'accelerationTime': time spent accelerating
-			'decelerationTime': time spent decelerating
-		}
+		Calculate time [seconds] needed to move from pointA to pointB along a Brachistochrone Trajectory
 	*/
-	travelTime(entityA, entityB, initialVel, maximumVel, stopVel, acceleration) {
-		let curDist = 0;
-		let endDist = Math.round(Math.sqrt((entityB.xPos - entityA.xPos)**2 + (entityB.yPos - entityA.yPos)**2));
-		console.log(endDist);
-		let curVel = 0;
-		let time = 0;
-		let accelerationTime = 0;
-		let decelerationTime = 0;
-		let decelerating = false;
-		while((endDist - curDist) > 0) {
-			time++;
-			let distRemaining = endDist - curDist;
-			let stoppingDist = endDist - (maximumVel / 2) + ((stopVel**2 - curVel**2) / (2*acceleration));
-
-			// Do not need to start decelerating, and do not accelerate if decelerating
-			if(curDist < stoppingDist && !decelerating) {
-				// Haven't yet reached maximumVel
-				if(curVel < maximumVel) {
-					accelerationTime++;
-					curVel = Math.min(curVel + acceleration, maximumVel);
-					curDist += curVel;
-
-				// Have reached maximum velocity
-				} else {
-					time += ((stoppingDist - curDist)/maximumVel);
-			        curDist += stoppingDist + (maximumVel / 2);
-			        decelerating = true;
-				}
-
-			// Need to begin decelerating
-			} else {
-				decelerating = true;
-				if(curVel > stopVel) {
-					decelerationTime++;
-					curVel = Math.max(curVel - acceleration, stopVel);
-				}
-				curDist += curVel;
-			}
-		}
-		return {
-			'time': time,
-			'dist': curDist,
-			'velocity': curVel,
-			'accelerationTime': accelerationTime,
-			'decelerationTime': decelerationTime
-		};
-	}
-
-	/**
-		Find the trajectory of shortest path from vessel A to entity B
-	*/
-	shortestVesselTrajectory(vesselA, entityB) {
-
-		// Entity B is in orbit, want to find intercept trajectory
-		if(entityB.orbit) {
-
-		}
+	travelTime(pointA, pointB, gForce) {
+		const dist = Math.sqrt((pointB.xPos - pointA.xPos)**2 + (pointB.yPos - pointB.xPos)**2);
+		return 2 * Math.sqrt(dist / gForce);
 	}
 }
 new GameManager();

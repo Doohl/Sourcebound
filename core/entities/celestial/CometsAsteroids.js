@@ -3,7 +3,7 @@ class Comet extends Celestial {
 		super(pProps, '#98A7D6');
 
 		this.eClass = 'Comet';
-		this.minRadius = 4;
+		this.minRadius = 2.3;
 	}
 }
 
@@ -12,6 +12,6 @@ class Asteroid extends Celestial {
 		super(pProps, '#98A7D6');
 
 		this.eClass = 'Asteroid';
-		this.minRadius = 2;
+		this.minRadius = 1;
 	}
 }

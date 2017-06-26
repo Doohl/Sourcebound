@@ -21,7 +21,7 @@ class DwarfPlanet extends Celestial {
 		super(pProps, '#98A7D6');
 
 		this.eClass = 'Dwarf Planet';
-		this.minRadius = 5;
+		this.minRadius = 2.5;
 	}
 }
 
@@ -29,7 +29,22 @@ class Moon extends Celestial {
 	constructor(pProps) {
 		super(pProps, '#98A7D6');
 
-		this.eClass = 'Moon';
-		this.minRadius = 2;
+		// Moons of < 200km radius are known as 'Small Moons', functionally asteroids
+		if(this.radius < 200) {
+			this.eClass = 'Small Moon';
+			this.minRadius = 1;
+		} else {
+			this.eClass = 'Moon';
+			this.minRadius = 2;
+		}
+	}
+}
+
+class SmallMoon extends Celestial {
+	constructor(pProps) {
+		super(pProps, '#98A7D6');
+
+		this.eClass = 'Small Moon';
+		this.minRadius = 1;
 	}
 }

@@ -17,6 +17,17 @@ function screenToReal(coords) {
 }
 
 
+// The default alpha value for the orbit ellipse for small celestials
+const ORBIT_INTENSITY_MOD = {
+	'Asteroid': 0.1,
+	'Comet': 0.3,
+	'Small Moon': 0.4,
+
+	'Dwarf Planet': 0.5,
+	'Moon': 0.7
+}
+
+
 /**
 	The rendering manager, draws to the canvas when needed
 */
@@ -136,9 +147,10 @@ class RenderManager {
 				if(orbitAlpha >= 0.99) {
 					orbitAlpha = 1;
 				}
-				if(entity.eClass === 'Comet') {
-					orbitAlpha /= 3;
+				if(ORBIT_INTENSITY_MOD[entity.eClass]) {
+					orbitAlpha *= ORBIT_INTENSITY_MOD[entity.eClass];
 				}
+
 				if(orbitAlpha > 0) {
 					context.beginPath();
 					context.strokeStyle = 'rgba(113,117,130,' + orbitAlpha + ')';

@@ -11,6 +11,7 @@ function NewtonApprox(max, previous, meanAnomaly, eccentricity, errorMargin) {
 	return ret;
 }
 
+
 /**
     A celestial body that has mass, an orbit and other geographic properties.
 */
@@ -56,7 +57,7 @@ class Celestial extends RenderEntity {
 		orbit.semiminorAxis		= Math.sqrt(orbit.periapsis * orbit.apoapsis);
 
 		// Sum of the standard gravitational parameters
-		orbit.standardGravTotal = this.standardGrav + orbit.focus.standardGrav;
+		orbit.standardGravTotal	= this.standardGrav + orbit.focus.standardGrav;
 
 		// Mean Angular Motion (n): function of the angular motion with respect to time
 		orbit.meanAngularMotion	= Math.sqrt(orbit.standardGravTotal / ((orbit.semimajorAxis * 1000) ** 3));
@@ -65,9 +66,9 @@ class Celestial extends RenderEntity {
 		}
 
 		// Orbital period: time it takes to perform one orbit, in years
-		orbit.period = Math.sqrt( (orbit.semimajorAxis / 1.496e+8)**3 ); // convert a[km] to a[AU]
+		orbit.period			= Math.sqrt( (orbit.semimajorAxis / 1.496e+8)**3 ); // convert a[km] to a[AU]
 
-		orbit.epochAnomaly = orbit.epochAnomaly || 0;
+		orbit.epochAnomaly		= orbit.epochAnomaly || 0;
 
 		orbit.focus.satellites.push(this);
 
@@ -91,15 +92,9 @@ class Celestial extends RenderEntity {
 	}
 
 	/**
-		Compute the True Anomaly (theta) of the orbit at [time]
+		Compute the Eccentric Anomaly (E) of the orbit at [mean anomaly]
 	*/
-	computeTrueAnomaly(time) {
-		if(!this.orbit) return; // must be an orbital
-
-		// Mean Anomaly (M): mean angular motion times [time]
-		const meanAnomaly = (this.orbit.meanAngularMotion * time) - this.orbit.epochAnomaly;
-
-		// Eccentric Anomaly (E): angular parameter that defines position of celestial along orbit
+	computeEccentricAnomaly(meanAnomaly) {
 		let eccentricAnomaly;
 
 		// Orbits of e>0.8, initial value of pi is used
@@ -111,6 +106,28 @@ class Celestial extends RenderEntity {
 			eccentricAnomaly = NewtonApprox(150, meanAnomaly, meanAnomaly, this.orbit.eccentricity, 10e-15);
 		}
 
+		return eccentricAnomaly;
+	}
+
+	/**
+		Compute the Mean Anomaly (M) at [time]
+	*/
+	computeMeanAnomaly(time) {
+		return (this.orbit.meanAngularMotion * time) - this.orbit.epochAnomaly;
+	}
+
+	/**
+		Compute the True Anomaly (theta) of the orbit at [time]
+	*/
+	computeTrueAnomaly(time) {
+		if(!this.orbit) return; // must be an orbital
+
+		// Mean Anomaly (M): mean angular motion times [time]
+		const meanAnomaly = this.computeMeanAnomaly(time);
+
+		// Eccentric Anomaly (E): angular parameter that defines position of celestial along orbit
+		let eccentricAnomaly = this.computeEccentricAnomaly(meanAnomaly);
+
 		// return the True Anomaly
 		return 2 * Math.atan2(
 			Math.sqrt(1 + this.orbit.eccentricity) * Math.sin(eccentricAnomaly / 2),
@@ -121,14 +138,11 @@ class Celestial extends RenderEntity {
 	/**
 		Compute the (x, y) coordinates of this celestial at a given [time] in seconds
 	*/
-	computeCoordinates(time) {
+	computeCoordinates(time, detailed) {
 		if(!this.orbit) return;
 
 		let trueAnomaly = this.computeTrueAnomaly(time);
 		const distance = (this.orbit.semimajorAxis * 1000) * ((1 - this.orbit.eccentricity**2) / (1 + this.orbit.eccentricity * Math.cos(trueAnomaly)));
-
-		// Tangential velocity
-		const velocity = Math.sqrt(this.orbit.standardGravTotal * (this.orbit.semimajorAxis * 1000)) / distance;
 
 		let x = this.orbit.focus.xPos + (distance / 1000) * Math.cos(trueAnomaly); // convert from m to km
 		let y = this.orbit.focus.yPos + (distance / 1000) * Math.sin(trueAnomaly); // convert from m to km
@@ -136,36 +150,30 @@ class Celestial extends RenderEntity {
 		let rotatedPoint = Util.rotatePoint({'xPos': x, 'yPos': y}, this.orbit.focus.xPos, this.orbit.focus.yPos, -this.orbit.omega);
 
 		// return the final coordinates
-		return {
-			'xPos': rotatedPoint.xPos,
-			'yPos': rotatedPoint.yPos,
-			'trueAnomaly': trueAnomaly,
-			'velocity': velocity / 1000 // convert from m/s to km/s
-		};
-	}
+		if(!detailed) {
+			return {
+				'xPos': rotatedPoint.xPos,
+				'yPos': rotatedPoint.yPos
+			};
 
-	/**
-		Computer the (x, y) coordinates of this celestial at a given [angle] in radians
-	*/
-	computeCoordinatesAngle(angle) {
-		if(!this.orbit) return;
+		// Return detailed orbital information, as well as coordinates
+		} else {
+			let eccentricAnomaly = this.computeEccentricAnomaly(this.computeMeanAnomaly(time));
 
-		const distance = (this.orbit.semimajorAxis * 1000) * ((1 - this.orbit.eccentricity**2) / (1 + this.orbit.eccentricity * Math.cos(angle)));
+			// Instantaneous orbital velocity
+			const velocity = Math.sqrt(this.orbit.standardGravTotal * (this.orbit.semimajorAxis * 1000)) / distance / 1000; // convert m/s to km/s
 
-		// Tangential velocity
-		const velocity = Math.sqrt(this.orbit.standardGravTotal * (this.orbit.semimajorAxis * 1000)) / distance;
-
-		let x = this.orbit.focus.xPos + (distance / 1000) * Math.cos(angle); // convert from m to km
-		let y = this.orbit.focus.yPos + (distance / 1000) * Math.sin(angle); // convert from m to km
-
-		let rotatedPoint = Util.rotatePoint({'xPos': x, 'yPos': y}, this.orbit.focus.xPos, this.orbit.focus.yPos, -this.orbit.omega);
-
-		// return the final coordinates
-		return {
-			'xPos': rotatedPoint.xPos,
-			'yPos': rotatedPoint.yPos,
-			'velocity': velocity / 1000 // convert from m/s to km/s
-		};
+			// Velocity Vector
+			let vel2D = new Vector(
+				-velocity * Math.sqrt(1 - this.orbit.eccentricity**2) * Math.cos(eccentricAnomaly),
+				-velocity * Math.sin(eccentricAnomaly)
+			);
+			return {
+				'xPos': rotatedPoint.xPos,
+				'yPos': rotatedPoint.yPos,
+				'velocity': vel2D
+			};
+		}
 	}
 
 	/**
@@ -173,12 +181,57 @@ class Celestial extends RenderEntity {
 	*/
 	onClick(event) {
 		GameM.target = this;
-		let targetVel = Math.sqrt(this.standardGrav / (this.radius * 1000) + 150000)/1000;
-		var travelTime = GameM.travelTime(
-			{'xPos': RenderM.xPos, 'yPos': RenderM.yPos},
-			this,
-			0, 4000, targetVel, 2 * 0.00980665
-		);
-		// Look for orbit
+		let t0 = new Date().getTime();
+
+		//let targetVel = Math.sqrt(this.standardGrav / (this.radius * 1000) + 150000)/1000;
+		const increment = 30;
+		let increments = 0;
+		const safeError = 30;
+		const gForce = 1 * 0.00981;
+		var startTime = GameM.universeClock;
+		let time = GameM.universeClock;
+		let computedError;
+		let angle = undefined;
+		let futurePos = undefined;
+		while(angle === undefined) {
+			increments++;
+			let pos = this.computeCoordinates(time);
+			let timeToPos = GameM.travelTime(RenderM, pos, gForce);
+			let deltaT = time - startTime;
+			computedError = Math.abs(timeToPos - deltaT)
+			if(computedError <= safeError) {
+				angle = Util.getAngle(RenderM, pos);
+				futurePos = pos;
+			}
+			time += increment;
+		}
+		console.log(angle);
+		console.log(computedError);
+		console.log(increments);
+
+		console.log((new Date().getTime()) - t0);
+
+		let testShip = new DwarfPlanet({
+			'name': 'SHIP',
+			'system': 'Sol'
+		});
+
+		testShip.movingToward = this;
+		testShip.velocity = {
+			'speed': 0,
+			'angle': angle
+		};
+		testShip.
+		testShip.burn = gForce;
+
+		let T = testShip;
+		testShip.flightSolution = function(deltaT) {
+			for(let i = 0; i < deltaT; i++) {
+				T.velocity.speed += T.burn;
+				T.xPos
+			}
+		}
+
+
 	}
 }

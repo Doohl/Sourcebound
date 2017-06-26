@@ -72,6 +72,20 @@ class Utilities {
         return value;
     }
 
+	/**
+		Get an angle between two points
+	*/
+	getAngle(pointA, pointB) {
+		let result = Math.atan2(pointA.yPos - pointB.yPos, pointB.xPos - pointA.xPos);
+		if(result > 2 * Math.PI) {
+			result -= 2 * Math.PI;
+		}
+		if(result < 0) {
+			result += 2 * Math.PI;
+		}
+		return result;
+	}
+
 
 	/**
 		Tween equations:

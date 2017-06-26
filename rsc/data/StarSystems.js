@@ -1,5 +1,11 @@
 const PARSEC_3D = 7.1404247561181866209600499495178;
 
+// Estimate a star's temperature in [Kelvin] given a B-V color index
+function estimateTemperature(bv) {
+    return 4600 * ((1/(0.92*bv + 1.7)) + (1/(0.92*bv + 0.62)));
+}
+
+
 /*
     List of real star systems near Sol
         - Distances are to be multiplied by the PARSEC_3D constant to convert to lightyears.
@@ -15,16 +21,43 @@ const PARSEC_3D = 7.1404247561181866209600499495178;
         - luminosity            : star's luminosity in solar luminosity
         - age                   : star's age in [Gy] (billion years)
         - x/y                   : distances from Sol in a unitless metric (most closely a parsec) to be converted to lightyears
+                                    (conversion: x/y * 7.1404247561181866209600499495178 = lightyears)
         - binary                : if defined, sets this star as an orbital of an existing star
 
     * If any values are left 'undefined' the system will attempt to generate / extrapolate values that best fit the
     supplied properties.
 */
 const INTERSTELLAR_MAP = {
+    // Sol System
     'Sol': {
         'stellarClass'          : 'G2V',
-        'colorIndex'            : ''
+        'colorIndex'            : 0.656,
+        'absoluteMagnitude'     : 4.85,
+        'mass'                  : 1,
+        'radius'                : 1,
+        'temperature'           : 5778,
+        'luminosity'            : 1,
+        'age'                   : 4.6,
+        'x'                     : 0,
+        'y'                     : 0
     },
+
+    // Hermes System
+    'Hermes': {
+        'designation'           : 'HD 75289',
+        'stellarClass'          : 'G0V',
+        'constellation'         : 'Vela',
+        'colorIndex'            : 0.58,
+        'absoluteMagnitude'     : 4.05,
+        'mass'                  : 1.05,
+        'radius'                : 1.25,
+        'temperature'           : 6011,
+        'luminosity'            : 1.82,
+        'age'                   : 4.96,
+        'x'                     : -14.42912,
+        'y'                     : -16.07115
+    },
+
     'Proxima Centauri': {
         'stellarClass'          : 'M6Ve',
         'colorIndex'            : 1.82,
@@ -161,8 +194,9 @@ function SolSystem() {
     let Sol = new Star({
         'name': "Sol",
         'system': 'Sol',
-        'radius': 695700,
-        'mass': 1.98855e+30,
+        'radius': 1,
+        'mass': 1,
+        'colorIndex': 0.656,
         'stellarClass': 'G'
     });
 
