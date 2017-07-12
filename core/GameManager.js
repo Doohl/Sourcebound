@@ -10,10 +10,10 @@ class GameManager {
 		/* When an entity is created, use this number as its ID-string and increment this value + 1 */
 		GameM._entityIncrement = 0;
 
-		/* Container of all game entities indexed by their ID-strings */
+		/* Container of all game entities indexed by their IDs */
 		GameM._gameEntities = {};
 
-		/* Arrays containing game entities to render, indexed by Star System ID-strings */
+		/* Arrays containing game entities to render, indexed by Star System IDs */
 		GameM._renderEntities = {};
 
 		/* Stars that have been generated thus far */
@@ -30,12 +30,12 @@ class GameManager {
 	}
 
 	/**
-		Assign an entity its ID-string and add it to the global list
+		Assign an entity its ID and add it to the global list
 	*/
 	addEntity(pEntity) {
 		if(pEntity === undefined) return;
 
-		pEntity.ID = (GameM._entityIncrement++).toString();
+		pEntity.ID = GameM._entityIncrement++;
 
 		GameM._gameEntities[pEntity.ID] = pEntity;
 	}
@@ -70,19 +70,23 @@ class GameManager {
 	*/
 	clockForward(time) {
 		GameM.universeClock += time;
-		for(let ID in GameM._gameEntities) {
-			let entity = GameM._gameEntities[ID];
+		const newTime = GameM.universeClock;
 
-			// Advance orbit
-			if(entity.orbit) {
-				let newCoords = entity.computeCoordinates(GameM.universeClock);
-				entity.xPos = newCoords.xPos;
-				entity.yPos = newCoords.yPos;
-			}
+		for(let i = 0, l = GameM._entityIncrement; i < l; i++) {
+			const entity = GameM._gameEntities[i];
 
-			// Check for flight solutions
-			if(entity.flightSolution) {
-				entity.flightSolution(time);
+			if(!entity.graveyard) {
+				// Advance orbit
+				if(entity.orbit) {
+					let newCoords = entity.computeCoordinates(newTime);
+					entity.xPos = newCoords.xPos;
+					entity.yPos = newCoords.yPos;
+				}
+
+				// Check for flight solutions
+				//if(entity.flightSolution) {
+				//	entity.flightSolution(time);
+				//}
 			}
 		}
 	}

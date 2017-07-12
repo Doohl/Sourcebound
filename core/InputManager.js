@@ -125,6 +125,7 @@ class InputManager {
 			InputM.mouseMoved = 0;
 
 		});
+
 	}
 
 	/**
@@ -191,6 +192,19 @@ class InputManager {
 
 	/* Debug key */
 	test() {
+		let time = 2.592e+6; // 1 month
+
+		let processing = setInterval(() => {
+			for(let i = 1; i <= 5000; i++) {
+				if(time <= 0) {
+					console.log("supposed to stop!");
+					clearInterval(processing);
+					return;
+				}
+				time -= 500;
+				GameM.clockForward(500);
+			}
+		}, 1);
 	}
 }
 InputM = new InputManager();
