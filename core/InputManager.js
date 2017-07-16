@@ -193,9 +193,7 @@ class InputManager {
 	/* Debug key */
 	test() {
 		console.time();
-		for(let i = 1; i <= 5000; i++) {
-			GameM.clockForward(5);
-		}
+		GameM.clockForward(1);
 		console.timeEnd();
 		/*
 		let time = 2.592e+6; // 1 month

@@ -3,7 +3,7 @@ class Comet extends Celestial {
 		super(pProps, '#98A7D6');
 
 		this.eClass = ENTITY.COMET;
-		this.minRadius = 2.3;
+		this.minRadius = 1;
 	}
 }
 

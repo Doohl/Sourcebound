@@ -1476,32 +1476,43 @@ function SolSystem() {
         });
 
     // Comets
-    let HalleysComet = new Comet({
-        'name': "Comet: Halley",
-        'system': 'Sol',
-        'radius': 5.5,
-        'mass': 2.2e+14,
-        'orbit': {
-            'focus': Sol,
-            'periapsis': 87664352,
-            'apoapsis': 5.24789e+9,
-            'omega': 1.94307506,
-            'epochAnomaly': 2.981
-        }
-    });
-    let Arrest6P = new Comet({
-        'name': "Comet: d'Arrest",
-        'system': 'Sol',
-        'radius': 12,
-        'mass': 4.97e+14,
-        'orbit': {
-            'focus': Sol,
-            'periapsis': 2.02406e+8,
-            'apoapsis': 8.43283e+8,
-            'omega': -0.0024,
-            'epochAnomaly': 3.51098897
-        }
-    });
+    let Comets = [
+        {
+            'name': "Halley",
+            'radius': 5.5,
+            'mass': 2.2e+14,
+            'orbit': {
+                'periapsis': 87664352,
+                'apoapsis': 5.24789e+9,
+                'omega': 1.94307506,
+                'epochAnomaly': 2.981
+            }
+        },
+        {
+            'name': "d'Arrest",
+            'radius': 12,
+            'mass': 4.97e+14,
+            'orbit': {
+                'periapsis': 2.02406e+8,
+                'apoapsis': 8.43283e+8,
+                'omega': -0.0024,
+                'epochAnomaly': 3.51098897
+            }
+        },
+        {
+            'name': "Swift-Tuttle",
+            'radius': 13.5,
+            'mass': 6.2e+18,
+            'orbit': {
+                'periapsis': 0.9595 * Util.AU,
+                'apoapsis': 51.225 * Util.AU,
+                'omega': 5.102703,
+                'epochAnomaly': 0.3325
+            }
+        },
+    ];
+
+
 
     // Asteroids
     let Asteroids = [
@@ -1595,11 +1606,356 @@ function SolSystem() {
                 'omega': 312.10 * Util.DEG
             }
         },
+        {
+            'name': "11 Parthenope",
+            'radius': 76,
+            'mass': 6.15e+18,
+            'orbit': {
+                'periapsis': 2.20671 * Util.AU,
+                'apoapsis': 2.69837 * Util.AU,
+                'omega': 196.005 * Util.DEG
+            }
+        },
+        {
+            'name': "12 Victoria",
+            'radius': 56.385,
+            'mass': 2.45e+18,
+            'orbit': {
+                'periapsis': 1.81758 * Util.AU,
+                'apoapsis': 2.84931 * Util.AU,
+                'omega': 69.5103 * Util.DEG
+            }
+        },
+        {
+            'name': "13 Egeria",
+            'radius': 103.82,
+            'mass': 1.63e+19,
+            'orbit': {
+                'periapsis': 2.36115 * Util.AU,
+                'apoapsis': 2.7927 * Util.AU,
+                'omega': 80.294 * Util.DEG
+            }
+        },
+        {
+            'name': "14 Irene",
+            'radius': 76,
+            'mass': 8.2e+18,
+            'orbit': {
+                'periapsis': 2.150 * Util.AU,
+                'apoapsis': 3.020 * Util.AU,
+                'omega': 96.473 * Util.DEG
+            }
+        },
+        {
+            'name': "15 Eunomia",
+            'radius': 128,
+            'mass': 3.12e+19,
+            'orbit': {
+                'periapsis': 2.149 * Util.AU,
+                'apoapsis': 3.138 * Util.AU,
+                'omega': 97.909 * Util.DEG
+            }
+        },
+        {
+            'name': "16 Psyche",
+            'radius': 126,
+            'mass': 2.27e+19,
+            'orbit': {
+                'periapsis': 2.513 * Util.AU,
+                'apoapsis': 3.328 * Util.AU,
+                'omega': 228.047 * Util.DEG
+            }
+        },
+        {
+            'name': "17 Thetis",
+            'radius': 46.5,
+            'mass': 1.2e+18,
+            'orbit': {
+                'periapsis': 2.1436 * Util.AU,
+                'apoapsis': 2.7987 * Util.AU,
+                'omega': 136.10 * Util.DEG
+            }
+        },
+        {
+            'name': "18 Melpomene",
+            'radius': 70,
+            'mass': 3.0e+18,
+            'orbit': {
+                'periapsis': 1.795 * Util.AU,
+                'apoapsis': 2.797 * Util.AU,
+                'omega': 227.975 * Util.DEG
+            }
+        },
+        {
+            'name': "19 Fortuna",
+            'radius': 112,
+            'mass': 1.27e+19,
+            'orbit': {
+                'periapsis': 2.052 * Util.AU,
+                'apoapsis': 2.831 * Util.AU,
+                'omega': 182.091 * Util.DEG
+            }
+        },
+        {
+            'name': "26 Proserpina",
+            'radius': 45,
+            'mass': 7.48e+17,
+            'orbit': {
+                'periapsis': 2.425 * Util.AU,
+                'apoapsis': 2.887 * Util.AU,
+                'omega': 193.120 * Util.DEG
+            }
+        },
+        {
+            'name': "28 Bellona",
+            'radius': 54,
+            'mass': 2.62e+18,
+            'orbit': {
+                'periapsis': 2.358 * Util.AU,
+                'apoapsis': 3.196 * Util.AU,
+                'omega': 344.461 * Util.DEG
+            }
+        },
+        {
+            'name': "29 Amphitrite",
+            'radius': 106,
+            'mass': 1.18e+19,
+            'orbit': {
+                'periapsis': 2.369 * Util.AU,
+                'apoapsis': 2.739 * Util.AU,
+                'omega': 63.433 * Util.DEG
+            }
+        },
+        {
+            'name': "35 Leukothea",
+            'radius': 51.55,
+            'mass': 1.09e+18,
+            'orbit': {
+                'periapsis': 2.307 * Util.AU,
+                'apoapsis': 3.672 * Util.AU,
+                'omega': 213.962 * Util.DEG
+            }
+        },
+        {
+            'name': "37 Fides",
+            'radius': 54.2,
+            'mass': 1.3e+18,
+            'orbit': {
+                'periapsis': 2.175 * Util.AU,
+                'apoapsis': 3.108 * Util.AU,
+                'omega': 62.683 * Util.DEG
+            }
+        },
+        {
+            'name': "433 Eros",
+            'radius': 8.42,
+            'mass': 6.687e+15,
+            'orbit': {
+                'periapsis': 1.133 * Util.AU,
+                'apoapsis': 1.783 * Util.AU,
+                'omega': 178.664 * Util.DEG,
+                'epochAnomaly': 1.002
+            }
+        },
+        {
+            'name': "(29075) 1950 DA",
+            'radius': 1,
+            'mass': 4.4e+12,
+            'orbit': {
+                'periapsis': 0.83698 * Util.AU,
+                'apoapsis': 2.5614 * Util.AU,
+                'omega': 224.54 * Util.DEG
+            }
+        },
+        {
+            'name': "1862 Apollo",
+            'radius': 1,
+            'mass': 2.52e+12,
+            'orbit': {
+                'periapsis': 0.64699 * Util.AU,
+                'apoapsis': 2.2935 * Util.AU,
+                'omega': 285.85 * Util.DEG,
+                'epochAnomaly': 176.95 * Util.DEG
+            }
+        },
+        {
+            'name': "99942 Apophis",
+            'radius': 0.185,
+            'mass': 6.1e+10,
+            'orbit': {
+                'periapsis': 0.74605 * Util.AU,
+                'apoapsis': 1.09851 * Util.AU,
+                'omega': 126.39364 * Util.DEG,
+                'epochAnomaly': 4.044
+            }
+        },
+        {
+            'name': "704 Interamnia",
+            'radius': 158.5,
+            'mass': 3.90e+19,
+            'orbit': {
+                'periapsis': 2.5857 * Util.AU,
+                'apoapsis': 3.5293 * Util.AU,
+                'omega': 95.208 * Util.DEG
+            }
+        },
+        {
+            'name': "52 Europa",
+            'radius': 180,
+            'mass': 3.27e+19,
+            'orbit': {
+                'periapsis': 2.785 * Util.AU,
+                'apoapsis': 3.417 * Util.AU,
+                'omega': 343.553 * Util.DEG
+            }
+        },
+        {
+            'name': "511 Davida",
+            'radius': 147,
+            'mass': 3.84e+19,
+            'orbit': {
+                'periapsis': 2.57323875 * Util.AU,
+                'apoapsis': 3.756248648 * Util.AU,
+                'omega': 338.17810 * Util.DEG
+            }
+        },
+        {
+            'name': "87 Sylvia",
+            'radius': 143,
+            'mass': 1.478e+19,
+            'orbit': {
+                'periapsis': 3.213 * Util.AU,
+                'apoapsis': 3.768 * Util.AU,
+                'omega': 266.195 * Util.DEG
+            },
+            'moons': [
+                {
+                    'name': "(87) Sylvia I Romulus",
+                    'radius': 9,
+                    'mass': 4e+15,
+                    'orbit': {
+                        'periapsis': 1354.644,
+                        'apoapsis': 1357.356,
+                        'omega': 84.66 * Util.DEG,
+                        'epochAnomaly': 0.0887
+                    }
+                },
+                {
+                    'name': "(87) Sylvia II Remus",
+                    'radius': 3.5,
+                    'mass': 2e+14,
+                    'orbit': {
+                        'periapsis': 694.704,
+                        'apoapsis': 717.296,
+                        'omega': 312 * Util.DEG,
+                        'epochAnomaly': 3.2
+                    }
+                }
+            ]
+        },
+        {
+            'name': "65 Cybele",
+            'radius': 118.65,
+            'mass': 1.78e+19,
+            'orbit': {
+                'periapsis': 3.073 * Util.AU,
+                'apoapsis': 3.794 * Util.AU,
+                'omega': 105.757 * Util.DEG
+            }
+        },
+        {
+            'name': "31 Euphrosyne",
+            'radius': 127.95,
+            'mass': 58.1e+18,
+            'orbit': {
+                'periapsis': 2.438 * Util.AU,
+                'apoapsis': 3.861 * Util.AU,
+                'omega': 61.996 * Util.DEG
+            }
+        },
+        {
+            'name': "624 Hektor",
+            'radius': 113.34,
+            'mass': 9.95e+18,
+            'orbit': {
+                'periapsis': 5.095 * Util.AU,
+                'apoapsis': 5.349 * Util.AU,
+                'omega': 183.579 * Util.DEG
+            }
+        },
+        {
+            'name': "88 Thisbe",
+            'radius': 116,
+            'mass': 1.83e+19,
+            'orbit': {
+                'periapsis': 2.312 * Util.AU,
+                'apoapsis': 3.224 * Util.AU,
+                'omega': 36.591 * Util.DEG
+            }
+        },
+        {
+            'name': "324 Bamberga",
+            'radius': 114.7,
+            'mass': 1.1e+19,
+            'orbit': {
+                'periapsis': 1.77023 * Util.AU,
+                'apoapsis': 3.59442 * Util.AU,
+                'omega': 44.2409 * Util.DEG
+            }
+        },
+        {
+            'name': "451 Patientia",
+            'radius': 117.21,
+            'mass': 1.09e+19,
+            'orbit': {
+                'periapsis': 2.8304 * Util.AU,
+                'apoapsis': 3.2929 * Util.AU,
+                'omega': 337.06 * Util.DEG
+            }
+        },
+        {
+            'name': "532 Herculina",
+            'radius': 111.195,
+            'mass': 2.29e+19,
+            'orbit': {
+                'periapsis': 2.28601 * Util.AU,
+                'apoapsis': 3.26056 * Util.AU,
+                'omega': 337.06 * Util.DEG
+            }
+        },
+        {
+            'name': "48 Doris",
+            'radius': 110.9,
+            'mass': 1.7e+19,
+            'orbit': {
+                'periapsis': 2.877 * Util.AU,
+                'apoapsis': 3.343 * Util.AU,
+                'omega': 257.583 * Util.DEG
+            }
+        },
     ];
 
     for(let asteroid of Asteroids) {
         asteroid.system = 'Sol';
         asteroid.orbit.focus = Sol;
-        new Asteroid(asteroid);
+        asteroid.orbit.epochAnomaly = asteroid.orbit.epochAnomaly || Math.random() * 2 * Math.PI;
+
+        let A = new Asteroid(asteroid);
+
+        if(asteroid.moons) {
+            for(let moon of asteroid.moons) {
+                moon.system = 'Sol';
+                moon.orbit.focus = A;
+                moon.orbit.epochAnomaly = Math.random() * 2 * Math.PI;
+
+                new Moon(moon);
+            }
+        }
+    }
+    for(let comet of Comets) {
+        comet.system = 'Sol';
+        comet.orbit.focus = Sol;
+        comet.orbit.epochAnomaly = comet.orbit.epochAnomaly || Math.random() * 2 * Math.PI;
+        new Comet(comet);
     }
 }

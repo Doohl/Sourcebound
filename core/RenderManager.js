@@ -20,7 +20,7 @@ function screenToReal(coords) {
 // The default alpha value for the orbit ellipse for small celestials
 const ORBIT_INTENSITY_MOD = [];
 	ORBIT_INTENSITY_MOD[ENTITY.ASTEROID] = 0.1;
-	ORBIT_INTENSITY_MOD[ENTITY.COMET] = 0.3;
+	ORBIT_INTENSITY_MOD[ENTITY.COMET] = 0.2;
 	ORBIT_INTENSITY_MOD[ENTITY.MOON | ENTITY.DWARF] = 0.4;
 	ORBIT_INTENSITY_MOD[ENTITY.PLANET | ENTITY.DWARF] = 0.5;
 	ORBIT_INTENSITY_MOD[ENTITY.MOON] = 0.7;
@@ -174,7 +174,7 @@ class RenderManager {
 			}
 
 			// Draw the entity's name
-			if((drawRadius > 2.2 || RenderM.zoom >= 0.0001) && entity.name) {
+			if((drawRadius > 2 || RenderM.zoom >= 0.0001 || entity.orbit.focus.eClass & ENTITY.STAR) && entity.name) {
 				context.textAlign = 'center';
 				context.font = '12px monospace';
 				context.fillText(entity.name, drawX, (drawY + drawRadius * 1.1) + 10);
