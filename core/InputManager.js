@@ -192,6 +192,12 @@ class InputManager {
 
 	/* Debug key */
 	test() {
+		console.time();
+		for(let i = 1; i <= 5000; i++) {
+			GameM.clockForward(5);
+		}
+		console.timeEnd();
+		/*
 		let time = 2.592e+6; // 1 month
 
 		let processing = setInterval(() => {
@@ -201,10 +207,11 @@ class InputManager {
 					clearInterval(processing);
 					return;
 				}
-				time -= 500;
-				GameM.clockForward(500);
+				time -= 5;
+				GameM.clockForward(5);
 			}
-		}, 1);
+		}, 100);
+		*/
 	}
 }
 InputM = new InputManager();

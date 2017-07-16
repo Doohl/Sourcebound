@@ -18,15 +18,12 @@ function screenToReal(coords) {
 
 
 // The default alpha value for the orbit ellipse for small celestials
-const ORBIT_INTENSITY_MOD = {
-	'Asteroid': 0.1,
-	'Comet': 0.3,
-	'Small Moon': 0.4,
-
-	'Dwarf Planet': 0.5,
-	'Moon': 0.7
-}
-
+const ORBIT_INTENSITY_MOD = [];
+	ORBIT_INTENSITY_MOD[ENTITY.ASTEROID] = 0.1;
+	ORBIT_INTENSITY_MOD[ENTITY.COMET] = 0.3;
+	ORBIT_INTENSITY_MOD[ENTITY.MOON | ENTITY.DWARF] = 0.4;
+	ORBIT_INTENSITY_MOD[ENTITY.PLANET | ENTITY.DWARF] = 0.5;
+	ORBIT_INTENSITY_MOD[ENTITY.MOON] = 0.7;
 
 /**
 	The rendering manager, draws to the canvas when needed

@@ -1502,4 +1502,104 @@ function SolSystem() {
             'epochAnomaly': 3.51098897
         }
     });
+
+    // Asteroids
+    let Asteroids = [
+        {
+            'name': "2 Pallas",
+            'radius': 256,
+            'mass': 2.11e+20,
+            'orbit': {
+                'periapsis': 318734227,
+                'apoapsis': 510518517,
+                'omega': 5.40930467
+            }
+        },
+        {
+            'name': "3 Juno",
+            'radius': 116,
+            'mass': 2.67e+19,
+            'orbit': {
+                'periapsis': 297470878,
+                'apoapsis': 501591188,
+                'omega': 4.33557239
+            }
+        },
+        {
+            'name': "4 Vesta",
+            'radius': 262,
+            'mass': 2.59076e+20,
+            'orbit': {
+                'periapsis': 2.15221 * Util.AU,
+                'apoapsis': 2.57138 * Util.AU,
+                'omega': 151.19853 * Util.DEG
+            }
+        },
+        {
+            'name': "5 Astraea",
+            'radius': 59,
+            'mass': 2.9e+18,
+            'orbit': {
+                'periapsis': 2.08186277 * Util.AU,
+                'apoapsis': 3.065755252 * Util.AU,
+                'omega': 358.92898 * Util.DEG
+            }
+        },
+        {
+            'name': "6 Hebe",
+            'radius': 102,
+            'mass': 1.28e+18,
+            'orbit': {
+                'periapsis': 1.937 * Util.AU,
+                'apoapsis': 2.914 * Util.AU,
+                'omega': 239.492 * Util.DEG
+            }
+        },
+        {
+            'name': "7 Iris",
+            'radius': 100,
+            'mass': 1.62e+18,
+            'orbit': {
+                'periapsis': 1.833 * Util.AU,
+                'apoapsis': 2.937 * Util.AU,
+                'omega': 145.440 * Util.DEG
+            }
+        },
+        {
+            'name': "8 Flora",
+            'radius': 72,
+            'mass': 8.47e+18,
+            'orbit': {
+                'periapsis': 1.858 * Util.AU,
+                'apoapsis': 2.546 * Util.AU,
+                'omega': 285.128 * Util.DEG
+            }
+        },
+        {
+            'name': "9 Metis",
+            'radius': 95,
+            'mass': 1.47e+19,
+            'orbit': {
+                'periapsis': 1.858 * Util.AU,
+                'apoapsis': 2.096 * Util.AU,
+                'omega': 5.489 * Util.DEG
+            }
+        },
+        {
+            'name': "10 Hygiea",
+            'radius': 215,
+            'mass': 8.67e+19,
+            'orbit': {
+                'periapsis': 2.7817 * Util.AU,
+                'apoapsis': 3.5024 * Util.AU,
+                'omega': 312.10 * Util.DEG
+            }
+        },
+    ];
+
+    for(let asteroid of Asteroids) {
+        asteroid.system = 'Sol';
+        asteroid.orbit.focus = Sol;
+        new Asteroid(asteroid);
+    }
 }

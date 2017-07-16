@@ -130,7 +130,7 @@ class Star extends Celestial {
 		// Star's age in billions of years
 		this.age = pProps.age;
 
-		this.eClass = 'Star';
+		this.eClass = ENTITY.STAR;
 
 		this.minRadius = 6;
 	}

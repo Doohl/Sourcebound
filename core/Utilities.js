@@ -19,6 +19,10 @@ class Utilities {
         Util.EARTH_YEAR = 3.154e+7;     // seconds in an earth year
         Util.EARTH_DAY = 86400;         // seconds in an earth day
 
+		/* Conversions */
+		Util.AU = 1.496e+8;				// 1 AU to km
+		Util.DEG = 0.0174533;			// 1 degree to radians
+
 		// Number of milliseconds between the Unix epoch and J2000 Epoch
 		Util.J2000_UNIX = Date.parse('Sat, 01 Jan 2000 12:00:00 GMT');
 	}
