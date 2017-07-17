@@ -1,0 +1,20 @@
+{
+    "version": "0.1.0",
+    "_runner": "terminal",
+    "tasks": [
+        {
+            "taskName": "build",
+            "command": "wa",
+            "args": [
+                "compile",
+                "-O",
+                "-m", "main",
+                "-o", "bin/main.wasm",
+                "core/main.c"
+            ],
+            "isShellCommand": true,
+            "isBuildCommand": true,
+            "showOutput": "always"
+        }
+    ]
+}
