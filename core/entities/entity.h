@@ -1,6 +1,8 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
+#include "orbit.h"
+
 /*
     Entity type flags (uint32)
 */
@@ -30,13 +32,28 @@ typedef enum Type {
 typedef struct Entity {
 
     /* A unique ID */
-    unsigned int id;
+    size_t id;
 
     /* The entity's non-unique name */
     char *name;
     
     /* Type bitfield */
     Type type;
+
+    /* This entity's orbital data */
+    Orbit orbit;
+
+    /* True if this entity has an orbit defined */
+    bool definedOrbit;
+
+    /* True if we want to draw this orbit */
+    bool drawOrbit;
+
+    /* If we're drawing this orbit, this is the default alpha value of the ellipse */
+    double orbitDrawIntensity;
+
+    /* True if deactivated / no longer running logic */
+    bool deactivated;
 
 } Entity;
 

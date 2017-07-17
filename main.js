@@ -21,7 +21,7 @@ if(typeof WebAssembly != "object") {
         }
     };
 
-    load("bin/game.wasm", loadOptions).then(module => {
+    load("bin/main.wasm", loadOptions).then(module => {
         gameMemory = module.memory;
 
         console.timeEnd("load time");

@@ -1,10 +1,14 @@
 #include <webassembly.h>
 
 #include "gamemanager.h"
-
+#include "uimanager.h"
+ 
 int main() {
-    console_log("Started!");
+    console_log("Successfully entered main()!");
+
     initGameManager();
+    initUIManager();
+
 
     return 0;
 }

@@ -9,8 +9,22 @@
                 "compile",
                 "-O",
                 "-m", "main",
+                    "-i", "core/gamemanager.c",
+                    "-i", "core/uimanager.c",
                 "-o", "bin/main.wasm",
                 "core/main.c"
+            ],
+            "isShellCommand": true,
+            "isBuildCommand": true,
+            "showOutput": "always"
+        }
+        {
+            "taskName": "disassemble",
+            "command": "wa",
+            "args": [
+                "dis",
+                "-o", "bin/main.wast",
+                "bin/main.wasm"
             ],
             "isShellCommand": true,
             "isBuildCommand": true,
