@@ -2,7 +2,7 @@ class Planet extends Celestial {
 	constructor(pProps) {
 		super(pProps, '#98A7D6');
 
-		this.eClass = 'Planet';
+		this.eClass = ENTITY.PLANET;
 		this.minRadius = 5;
 	}
 }
@@ -11,7 +11,7 @@ class GasGiant extends Celestial {
 	constructor(pProps) {
 		super(pProps, '#98A7D6');
 
-		this.eClass = 'Gas Giant';
+		this.eClass = ENTITY.PLANET | ENTITY.GAS;
 		this.minRadius = 5;
 	}
 }
@@ -20,7 +20,7 @@ class DwarfPlanet extends Celestial {
 	constructor(pProps) {
 		super(pProps, '#98A7D6');
 
-		this.eClass = 'Dwarf Planet';
+		this.eClass = ENTITY.PLANET | ENTITY.DWARF;
 		this.minRadius = 2.5;
 	}
 }
@@ -29,9 +29,11 @@ class Moon extends Celestial {
 	constructor(pProps) {
 		super(pProps, '#98A7D6');
 
-		// Moons of < 200km radius are known as 'Small Moons', functionally asteroids
+		this.eClass = ENTITY.MOON;
+
+		// Moons of < 200km radius are known as 'Dwarf Moons', functionally asteroids
 		if(this.radius < 200) {
-			this.eClass = 'Small Moon';
+			this.eClass |= ENTITY.DWARF;
 			this.minRadius = 1;
 		} else {
 			this.eClass = 'Moon';
@@ -44,7 +46,7 @@ class SmallMoon extends Celestial {
 	constructor(pProps) {
 		super(pProps, '#98A7D6');
 
-		this.eClass = 'Small Moon';
+		this.eClass = ENTITY.MOON | ENTITY.DWARF;
 		this.minRadius = 1;
 	}
 }

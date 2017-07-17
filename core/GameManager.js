@@ -71,7 +71,7 @@ class GameManager {
 	clockForward(time) {
 		GameM.universeClock += time;
 		const newTime = GameM.universeClock;
-
+		
 		for(let i = 0, l = GameM._entityIncrement; i < l; i++) {
 			const entity = GameM._gameEntities[i];
 
