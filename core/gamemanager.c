@@ -1,3 +1,5 @@
+#include <webassembly.h>
+
 #include "gamemanager.h"
 
 void initGameManager() {

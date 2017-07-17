@@ -9,7 +9,7 @@ typedef unsigned int size_t;
 	An EntityList is a resizable container of Entity pointers
 */
 
-typedef struct {
+typedef struct EntityList {
 
     Entity **array;
     size_t used;
