@@ -235,6 +235,7 @@ function SolSystem() {
         'system': 'Sol',
         'radius': 6371,
         'mass': 5.97237e+24,
+        'rotationPeriod': 24,
         'orbit': {
             'focus': Sol,
             'periapsis': 147100000,
@@ -248,6 +249,7 @@ function SolSystem() {
             'system': 'Sol',
             'radius': 1737,
             'mass': 7.34767309e+22,
+            'rotationPeriod': 655.719864,
             'orbit': {
                 'focus': Earth,
                 'periapsis': 362600,
@@ -581,6 +583,19 @@ function SolSystem() {
                 'periapsis': 1.608e+7,
                 'apoapsis': 2.5732e+7,
                 'omega': 3.4294,
+                'clockwise': true
+            }
+        });
+        let Megaclite = new Moon({
+            'name': "Megaclite",
+            'system': 'Sol',
+            'radius': 2.7,
+            'mass': 0.021e+16,
+            'orbit': {
+                'focus': Jupiter,
+                'periapsis': 13785.99 * 10e+2,
+                'apoapsis': 33834.01 * 10e+2,
+                'omega': 0.225,
                 'clockwise': true
             }
         });
@@ -1314,6 +1329,7 @@ function SolSystem() {
         'system': 'Sol',
         'radius': 473,
         'mass': 9.393e+20,
+        'rotationPeriod': 9.074170,
         'orbit': {
             'focus': Sol,
             'periapsis': 382620000,
@@ -1768,17 +1784,6 @@ function SolSystem() {
             }
         },
         {
-            'name': "1862 Apollo",
-            'radius': 1,
-            'mass': 2.52e+12,
-            'orbit': {
-                'periapsis': 0.64699 * Util.AU,
-                'apoapsis': 2.2935 * Util.AU,
-                'omega': 285.85 * Util.DEG,
-                'epochAnomaly': 176.95 * Util.DEG
-            }
-        },
-        {
             'name': "99942 Apophis",
             'radius': 0.185,
             'mass': 6.1e+10,
@@ -1874,16 +1879,6 @@ function SolSystem() {
             }
         },
         {
-            'name': "624 Hektor",
-            'radius': 113.34,
-            'mass': 9.95e+18,
-            'orbit': {
-                'periapsis': 5.095 * Util.AU,
-                'apoapsis': 5.349 * Util.AU,
-                'omega': 183.579 * Util.DEG
-            }
-        },
-        {
             'name': "88 Thisbe",
             'radius': 116,
             'mass': 1.83e+19,
@@ -1933,6 +1928,291 @@ function SolSystem() {
                 'omega': 257.583 * Util.DEG
             }
         },
+        {
+            'name': "423 Diotima",
+            'radius': 104.385,
+            'mass': 1.6e+19,
+            'orbit': {
+                'periapsis': 2.95026 * Util.AU,
+                'apoapsis': 3.18523 * Util.AU,
+                'omega': 200.103 * Util.DEG
+            }
+        },
+        {
+            'name': "375 Ursula",
+            'radius': 108,
+            'mass': 8.45e+18,
+            'orbit': {
+                'periapsis': 2.789 * Util.AU,
+                'apoapsis': 3.46 * Util.AU,
+                'omega': 321.2357 * Util.DEG
+            }
+        },
+        {
+            'name': "107 Camilla",
+            'radius': 107,
+            'mass': 1.12e+19,
+            'orbit': {
+                'periapsis': 3.2597 * Util.AU,
+                'apoapsis': 3.7201 * Util.AU,
+                'omega': 122.995 * Util.DEG
+            }
+        },
+        {
+            'name': "45 Eugenia",
+            'radius': 107,
+            'mass': 5.69e+18,
+            'orbit': {
+                'periapsis': 2.497 * Util.AU,
+                'apoapsis': 2.943 * Util.AU,
+                'omega': 233.076 * Util.DEG
+            }
+        },
+        {
+            'name': "45 Eugenia",
+            'radius': 107,
+            'mass': 5.69e+18,
+            'orbit': {
+                'periapsis': 2.497 * Util.AU,
+                'apoapsis': 2.943 * Util.AU,
+                'omega': 233.076 * Util.DEG
+            }
+        },
+        {
+            'name': "912 Maritima",
+            'radius': 107,
+            'mass': 5.69e+18,
+            'orbit': {
+                'periapsis': 2.497 * Util.AU,
+                'apoapsis': 2.943 * Util.AU,
+                'omega': 233.076 * Util.DEG
+            }
+        },
+        {
+            'name': "121 Hermione",
+            'radius': 95,
+            'mass': 5.38e+18,
+            'orbit': {
+                'periapsis': 2.982 * Util.AU,
+                'apoapsis': 3.933 * Util.AU,
+                'omega': 296.215 * Util.DEG
+            }
+        },
+        {
+            'name': "120 Lachesis",
+            'radius': 87.05,
+            'mass': 5.5e+18,
+            'orbit': {
+                'periapsis': 2.95390 * Util.AU,
+                'apoapsis': 3.2814 * Util.AU,
+                'omega': 232.822 * Util.DEG
+            }
+        },
+        {
+            'name': "702 Alauda",
+            'radius': 97.365,
+            'mass': 6.057e+18,
+            'orbit': {
+                'periapsis': 3.1349 * Util.AU,
+                'apoapsis': 3.2559 * Util.AU,
+                'omega': 349.51 * Util.DEG
+            }
+        },
+        {
+            'name': "94 Aurora",
+            'radius': 197,
+            'mass': 6.057e+18,
+            'orbit': {
+                'periapsis': 2.86831 * Util.AU,
+                'apoapsis': 3.45175 * Util.AU,
+                'omega': 60.8260 * Util.DEG
+            }
+        },
+        {
+            'name': "372 Palma",
+            'radius': 189,
+            'mass': 5.15e+18,
+            'orbit': {
+                'periapsis': 2.33325 * Util.AU,
+                'apoapsis': 3.9693 * Util.AU,
+                'omega': 115.582 * Util.DEG
+            }
+        },
+        {
+            'name': "24 Themis",
+            'radius': 198,
+            'mass': 2.3e+19,
+            'orbit': {
+                'periapsis': 2.719 * Util.AU,
+                'apoapsis': 3.539 * Util.AU,
+                'omega': 35.99 * Util.DEG
+            }
+        },
+        {
+            'name': "259 Aletheia",
+            'radius': 190,
+            'mass': 7.79e+18,
+            'orbit': {
+                'periapsis': 2.7347 * Util.AU,
+                'apoapsis': 3.5353 * Util.AU,
+                'omega': 168.07 * Util.DEG
+            }
+        },
+        {
+            'name': "41 Daphne",
+            'radius': 174,
+            'mass': 6.8e+18,
+            'orbit': {
+                'periapsis': 2.014 * Util.AU,
+                'apoapsis': 3.517 * Util.AU,
+                'omega': 46.239 * Util.DEG
+            }
+        },
+        {
+            'name': "128 Nemesis",
+            'radius': 188,
+            'mass': 5.97e+18,
+            'orbit': {
+                'periapsis': 2.40068 * Util.AU,
+                'apoapsis': 3.09824 * Util.AU,
+                'omega': 303.860 * Util.DEG
+            }
+        },
+        {
+            'name': "1862 Apollo",
+            'radius': 1,
+            'mass': 2.52e+12,
+            'orbit': {
+                'periapsis': 0.64699 * Util.AU,
+                'apoapsis': 2.2935 * Util.AU,
+                'omega': 285.85 * Util.DEG,
+                'epochAnomaly': 176.95 * Util.DEG
+            }
+        },
+
+        /* Jupiter Trojans */
+        {
+            'name': "624 Hektor",
+            'radius': 113.34,
+            'mass': 9.95e+18,
+            'orbit': {
+                'periapsis': 5.095 * Util.AU,
+                'apoapsis': 5.349 * Util.AU,
+                'omega': 185.152 * Util.DEG,
+                'epochAnomaly': 5.386
+            }
+        },
+        {
+            'name': "911 Agamemnon",
+            'radius': 83.33,
+            'mass': 4.22e+18,
+            'orbit': {
+                'periapsis': 4.9275 * Util.AU,
+                'apoapsis': 5.6215 * Util.AU,
+                'omega': 59.419 * Util.DEG,
+                'epochAnomaly': 0.922
+            }
+        },
+        {
+            'name': "1437 Diomedes",
+            'radius': 82.155,
+            'mass': 6.126e+18,
+            'orbit': {
+                'periapsis': 4.9654 * Util.AU,
+                'apoapsis': 5.4237 * Util.AU,
+                'omega': 87.382 * Util.DEG,
+                'epochAnomaly': 0.6678
+            }
+        },
+        {
+            'name': "1172 Äneas",
+            'radius': 71.41,
+            'mass': 3.85e+18,
+            'orbit': {
+                'periapsis': 4.6779 * Util.AU,
+                'apoapsis': 5.7579 * Util.AU,
+                'omega': 298.501 * Util.DEG,
+                'epochAnomaly': 0.8026
+            }
+        },
+        {
+            'name': "617 Patroclus",
+            'radius': 70.5,
+            'mass': 1.36e+18,
+            'orbit': {
+                'periapsis': 4.4958 * Util.AU,
+                'apoapsis': 5.9389 * Util.AU,
+                'omega': 352.725 * Util.DEG,
+                'epochAnomaly': 5.948
+            }
+        },
+        {
+            'name': "588 Achilles",
+            'radius': 67.735,
+            'mass': 9.288e+17,
+            'orbit': {
+                'periapsis': 4.4432 * Util.AU,
+                'apoapsis': 5.9713 * Util.AU,
+                'omega': 326.866 * Util.DEG,
+                'epochAnomaly': 5.866
+            }
+        },
+        {
+            'name': "1173 Anchises",
+            'radius': 63.135,
+            'mass': 7.1864e+17,
+            'orbit': {
+                'periapsis': 4.57388 * Util.AU,
+                'apoapsis': 6.02443 * Util.AU,
+                'omega': 324.6927 * Util.DEG,
+                'epochAnomaly': 5.766
+            }
+        },
+        {
+            'name': "1143 Odysseus",
+            'radius': 62.82,
+            'mass': 6.2e+17,
+            'orbit': {
+                'periapsis': 4.57388 * Util.AU,
+                'apoapsis': 6.02443 * Util.AU,
+                'omega': 98.24 * Util.DEG,
+                'epochAnomaly': 0.5678
+            }
+        },
+        {
+            'name': "659 Nestor",
+            'radius': 56.16,
+            'mass': 8.6e+17,
+            'orbit': {
+                'periapsis': 4.5668 * Util.AU,
+                'apoapsis': 5.7842 * Util.AU,
+                'omega': 332.96 * Util.DEG,
+                'epochAnomaly': 175.32 * Util.DEG
+            }
+        },
+        {
+            'name': "1404 Ajax",
+            'radius': 48.17,
+            'mass': 8.992e+16,
+            'orbit': {
+                'periapsis': 4.7036 * Util.AU,
+                'apoapsis': 5.9024 * Util.AU,
+                'omega': 32.801 * Util.DEG,
+                'epochAnomaly': 124.7 * Util.DEG
+            }
+        },
+        {
+            'name': "884 Priamus",
+            'radius': 59.995,
+            'mass': 1.882e+17,
+            'orbit': {
+                'periapsis': 4.5515 * Util.AU,
+                'apoapsis': 5.8128 * Util.AU,
+                'omega': 277.1 * Util.DEG,
+                'epochAnomaly': 314.28 * Util.DEG
+            }
+        },
+
     ];
 
     for(let asteroid of Asteroids) {
@@ -1952,6 +2232,9 @@ function SolSystem() {
             }
         }
     }
+
+    console.log("Generated " + Asteroids.length + " asteroids!");
+
     for(let comet of Comets) {
         comet.system = 'Sol';
         comet.orbit.focus = Sol;

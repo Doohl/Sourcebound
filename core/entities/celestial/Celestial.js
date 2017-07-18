@@ -29,6 +29,9 @@ class Celestial extends RenderEntity {
 		/* Standard gravitational parameter */
 		this.standardGrav = Util.G_CONSTANT * this.mass;
 
+		/* Rotational period in hours */
+		this.rotationPeriod = pProps.rotationPeriod;
+
 		if(pProps.orbit) {
 			this.makeOrbital(pProps.orbit);
 		}
