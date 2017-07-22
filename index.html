@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>SourceBound :: [Mission Status]</title>
+	<title>[SOURCEBOUND]</title>
 
 	<link href="rsc/ui.css" rel="stylesheet" type="text/css" media="screen" />
 
@@ -20,9 +20,13 @@
 	<script src="core/entities/celestial/PlanetsMoons.js"></script>
 	<script src="core/entities/celestial/CometsAsteroids.js"></script>
 
+	<script src="core/ui_windows/Window.js"></script>
+	<script src="core/ui_windows/Newsfeed.js"></script>
+
 	<script src="core/GameManager.js"></script>
 	<script src="core/RenderManager.js"></script>
 	<script src="core/InputManager.js"></script>
+	<script src="core/UIManager.js"></script>
 
 	<script src="core/SystemGenerator.js"></script>
 
@@ -31,6 +35,16 @@
 <body>
 
 <canvas id="canvas"></canvas>
+
+<div class='ui-window' id='window-Newsfeed'>
+	<div class='ui-window-header'>
+		<div class='ui-window-header-minimize'></div>
+		<div class='ui-window-header-name'>Newsfeed</div>
+	</div>
+	<div class='ui-window-body'>
+		
+	</div>
+</div>
 
 </body>
 </html>

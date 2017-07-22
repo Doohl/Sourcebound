@@ -5,7 +5,107 @@ html, body { width:100%; height:100%; } /* just to be sure these are full screen
 canvas { display:block; } /* To remove the scrollbars */
 
 
-/* to show the canvas bounds */
-canvas {
+/* The main rendering canvas */
+#canvas {
 	background: #0F1A40;
 }
+
+/* The base UI window class */
+.ui-window {
+	background-color: rgba(0, 0, 0, 0.5);
+	border-radius: 0px 0px 10px 10px;
+	
+	font-family: monospace;
+	color: #D6D6D6;
+	font-size: 14px;
+	user-select: none;
+
+	transition: background-color 0.2s;
+}
+	/* The header of the UI window class */
+	.ui-window-header {
+		position: absolute;
+
+		background: rgba(133, 103, 37, 0.99);
+		border-radius: 10px 10px 0px 0px;
+		height: 25px;
+		width: 100%;
+		cursor: move;
+
+		color: #fff;
+		font-size: 18px;
+		
+		padding-top: 4px;
+		top: -29px;
+	}
+		.ui-window-header-minimize {
+			position: absolute;
+			display: inline-block;
+			left: 5px;
+			bottom: 0px;
+			cursor: pointer;
+
+			font-weight: bold;
+			font-size: 24px;
+			text-align: center;
+			width: 30px;
+		}
+		.ui-window-header-minimize:after {
+			content: "▼";
+		}
+		.ui-window-header-name {
+			display: inline-block;
+			margin-left: 40px;
+			cursor: default;
+			pointer-events: none;
+		}
+	
+	/* The body of the UI window */
+	.ui-window-body {
+		position: relative;
+		padding: 5px;
+		width: calc(100% - 10px);
+		height: calc(100% - 18px);
+		cursor: default;
+		overflow-y: auto;
+	}
+
+.ui-window:hover {
+	background: rgba(12, 12, 12, 0.90);
+}
+
+/* Scrollbar style */
+.ui-window-body::-webkit-scrollbar-track {
+	background-color: rgba(0, 0, 0, 0.40);
+	border-radius: 16px;
+}
+.ui-window-body::-webkit-scrollbar {
+	width: 12px;
+}
+.ui-window-body::-webkit-scrollbar-thumb {
+	background-color: rgba(185, 185, 185, 0.80);
+	border-radius: 16px;
+}
+
+
+/* News Feed - displays recent events */
+#window-Newsfeed {
+	position: fixed;
+	
+	right: 10px;
+	bottom: 10px;
+	
+	width: 400px;
+	height: 250px;
+}
+	.ui-newsdate {
+		color: #D2D69F;
+		text-align: left;
+		font-weight: bold;
+	}
+	.ui-newsentry {
+		margin-left: 20px;
+	}
+		.news-civ {
+			color: #D6D6D6;
+		}

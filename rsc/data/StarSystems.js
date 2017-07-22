@@ -273,34 +273,37 @@ function SolSystem() {
         },
         'hydrosphere': [
             {
-                'type': 'h2o',
+                'type': 'water',
                 'local': 'polar',
-                'solid': 11         // 11% of surface covered in ice water (mostly localized to polar caps)
+                'km^3': 5e+6         // 5 million cubic kilometers of ice located on the poles
             }
         ],
-        'atmosphere': 0.00592154,   // atmospheric pressure in atm
-        'atmosphereComp': [
-            {
-                'type': 'co2',
-                'percent': 95.9
-            },
-            {
-                'type': 'ar',
-                'percent': 1.93
-            },
-            {
-                'type': 'n',
-                'percent': 1.89
-            },
-            {
-                'type': 'o2',
-                'percent': 0.146
-            },
-            {
-                'type': 'co',
-                'percent': 0.0557
-            }
-        ]
+
+        'atmosphere': {
+            'pressure': 0.00592154,  // median atmosphereic pressure [in atm]
+            'composition': [
+                {
+                    'type': 'co2',
+                    'percent': 95.9
+                },
+                {
+                    'type': 'ar',
+                    'percent': 1.93
+                },
+                {
+                    'type': 'n',
+                    'percent': 1.89
+                },
+                {
+                    'type': 'o2',
+                    'percent': 0.146
+                },
+                {
+                    'type': 'co',
+                    'percent': 0.0557
+                }
+            ]
+        }
     });
         let Phobos = new Moon({
             'name': "Phobos",
@@ -2209,7 +2212,20 @@ function SolSystem() {
                 'periapsis': 4.5515 * Util.AU,
                 'apoapsis': 5.8128 * Util.AU,
                 'omega': 277.1 * Util.DEG,
-                'epochAnomaly': 314.28 * Util.DEG
+                'epochAnomaly': 14.28 * Util.DEG
+            }
+        },
+
+        // Centaurs
+        {
+            'name': "55576 Amycus",
+            'radius': 38.15,
+            'mass': 1.882e+17,
+            'orbit': {
+                'periapsis': 4.5515 * Util.AU,
+                'apoapsis': 5.8128 * Util.AU,
+                'omega': 277.1 * Util.DEG,
+                'epochAnomaly': 14.28 * Util.DEG
             }
         },
 

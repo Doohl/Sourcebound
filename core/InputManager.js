@@ -125,7 +125,6 @@ class InputManager {
 			InputM.mouseMoved = 0;
 
 		});
-
 	}
 
 	/**

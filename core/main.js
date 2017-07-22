@@ -5,9 +5,11 @@
 */
 
 $(() => {
+	GameM.clockSet(4.24317e+11);
 
 	RenderM.initiate();
 	InputM.initiate();
+	UI.initiate();
 
 	GameM.viewingSystem = 'Sol';
 
@@ -15,11 +17,10 @@ $(() => {
 	GenerateSystem('test'); // generate a random system
 
 	GameM.paused = true;
-	GameM.increment = Util.EARTH_DAY * 30;
-	GameM.clockSet(0);
+	GameM.increment = Util.EARTH_DAY * 15;
 	setInterval(() => {
 		if(!GameM.paused) {
-			GameM.clockForward(Math.round(GameM.increment / 66.666666666666666666666666666667));
+			GameM.clockForward(GameM.increment / 66.666666666666666666666666666667);
 		}
 	}, 15);
 });

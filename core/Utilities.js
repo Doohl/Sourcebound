@@ -108,7 +108,12 @@ class Utilities {
 	getStringDate(time) {
 		let currentDate = new Date();
 		currentDate.setTime(Util.J2000_UNIX + (time * 1000)); // convert seconds to milliseconds
-		return currentDate.toString();
+		return currentDate.toLocaleDateString('en-US', {
+			weekday: 'long',
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric'
+		});
 	}
 }
 

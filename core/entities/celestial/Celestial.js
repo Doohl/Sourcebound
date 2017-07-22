@@ -32,6 +32,12 @@ class Celestial extends RenderEntity {
 		/* Rotational period in hours */
 		this.rotationPeriod = pProps.rotationPeriod;
 
+		/* Hydrosphere defines the combined amount of liquid in this celestial */
+		this.hydrosphere = pProps.hydrosphere;
+
+		/* 
+
+		/* Define orbital data */
 		if(pProps.orbit) {
 			this.makeOrbital(pProps.orbit);
 		}

@@ -19,8 +19,8 @@ function screenToReal(coords) {
 
 // The default alpha value for the orbit ellipse for small celestials
 const ORBIT_INTENSITY_MOD = [];
-	ORBIT_INTENSITY_MOD[ENTITY.ASTEROID] = 0.1;
-	ORBIT_INTENSITY_MOD[ENTITY.COMET] = 0.2;
+	ORBIT_INTENSITY_MOD[ENTITY.ASTEROID] = 0.05;
+	ORBIT_INTENSITY_MOD[ENTITY.COMET] = 0.1;
 	ORBIT_INTENSITY_MOD[ENTITY.MOON | ENTITY.DWARF] = 0.4;
 	ORBIT_INTENSITY_MOD[ENTITY.PLANET | ENTITY.DWARF] = 0.5;
 	ORBIT_INTENSITY_MOD[ENTITY.MOON] = 0.7;
@@ -55,26 +55,12 @@ class RenderManager {
 		RenderM._canvas = $('#canvas')[0];
 		RenderM._context = RenderM._canvas.getContext('2d');
 
-		// resize the canvas to fill browser window dynamically
-		window.addEventListener('resize', RenderM.resizeCanvas, false);
-
-		RenderM.resizeCanvas();
-
 		// The render loop (60 fps)
 		if(RenderM.renderMethod) {
 			setInterval(RenderM.renderFrameCanvas2D, 16);
 		} else {
 			setInterval(RenderM.renderFrameWebGL, 16);
 		}
-	}
-
-	/**
-		Handle window resizing
-	*/
-	resizeCanvas() {
-		RenderM._canvas.width = window.innerWidth;
-		RenderM._canvas.height = window.innerHeight;
-		RenderM.renderFrameCanvas2D();
 	}
 
 	/**
@@ -147,13 +133,14 @@ class RenderManager {
 				if(ORBIT_INTENSITY_MOD[entity.eClass]) {
 					orbitAlpha *= ORBIT_INTENSITY_MOD[entity.eClass];
 				}
-
+				
 				if(orbitAlpha > 0) {
 					context.beginPath();
 					context.strokeStyle = 'rgba(113,117,130,' + orbitAlpha + ')';
 					context.ellipse(orbitX, orbitY, orbit.semimajorAxis * RenderM.zoom, orbit.semiminorAxis * RenderM.zoom, -orbit.omega, 0, 2 * Math.PI);
 					context.stroke();
 				}
+				
 			}
 
 			if(!drawRadius) {
