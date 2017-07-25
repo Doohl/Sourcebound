@@ -1,33 +1,30 @@
 class Planet extends Celestial {
 	constructor(pProps) {
-		super(pProps, '#98A7D6');
+		super(pProps, 0x98A7D6, 5);
 
 		this.eClass = ENTITY.PLANET;
-		this.minRadius = 5;
 	}
 }
 
 class GasGiant extends Celestial {
 	constructor(pProps) {
-		super(pProps, '#98A7D6');
+		super(pProps, 0x98A7D6, 5);
 
 		this.eClass = ENTITY.PLANET | ENTITY.GAS;
-		this.minRadius = 5;
 	}
 }
 
 class DwarfPlanet extends Celestial {
 	constructor(pProps) {
-		super(pProps, '#98A7D6');
+		super(pProps, 0x98A7D6, 2.5);
 
 		this.eClass = ENTITY.PLANET | ENTITY.DWARF;
-		this.minRadius = 2.5;
 	}
 }
 
 class Moon extends Celestial {
 	constructor(pProps) {
-		super(pProps, '#98A7D6');
+		super(pProps, 0x98A7D6, 2);
 
 		this.eClass = ENTITY.MOON;
 
@@ -35,18 +32,14 @@ class Moon extends Celestial {
 		if(this.radius < 200) {
 			this.eClass |= ENTITY.DWARF;
 			this.minRadius = 1;
-		} else {
-			this.eClass = 'Moon';
-			this.minRadius = 2;
 		}
 	}
 }
 
 class SmallMoon extends Celestial {
 	constructor(pProps) {
-		super(pProps, '#98A7D6');
+		super(pProps, 0x98A7D6, 1);
 
 		this.eClass = ENTITY.MOON | ENTITY.DWARF;
-		this.minRadius = 1;
 	}
 }

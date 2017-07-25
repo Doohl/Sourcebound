@@ -33,10 +33,66 @@ class InputManager {
 	}
 
 	/**
+	 * Handles RenderM._stage 'mousedown' event 
+	 * 
+	 * @param {event} event The standard mouse event
+	 */
+	onMouseDown(event) {
+		InputM.holdingMouse = true;
+		InputM.mouseMoved = 0; // how many mouse movements have been done
+	}
+
+	/**
+	 * Handles RenderM._stage 'mouseup' event 
+	 * 
+	 * @param {event} event The standard mouse event
+	 */
+	onMouseUp(event) {
+		InputM.holdingMouse = false;
+		InputM.mouseMoved = 0;
+	}
+
+	/**
+	 * Handles RenderM._stage 'mousemove' event 
+	 * 
+	 * @param {event} event The standard mouse event
+	 */
+	onMouseMove(event) {
+		if(InputM.holdingMouse && InputM.mouseX !== undefined && InputM.mouseY !== undefined) {
+			const oldReal = screenToReal({'x': InputM.mouseX, 'y': InputM.mouseY});
+			const curReal = screenToReal({'x': event.pageX, 'y': event.pageY});
+			const xDiff = oldReal.x - curReal.x;
+			const yDiff = oldReal.y - curReal.y;
+			RenderM.moveCameraPos(xDiff, yDiff);
+		}
+		InputM.mouseMoved++;
+		InputM.mouseX = event.pageX;
+		InputM.mouseY = event.pageY;
+	}
+
+	onMouseWheel(event) {
+		if(event.deltaY > 0) {
+			InputM.zoomOut(1.25);
+		} else if(event.deltaY < 0) {
+			InputM.zoomIn(1.25);
+		}
+	}
+
+	/**
 		Called when the DOM is fully loaded
 			- Begin listening for input events
 	*/
 	initiate() {
+
+		// Begin listening for mouse events in the document
+		document.addEventListener('mousedown', InputM.onMouseDown);
+		document.addEventListener('mouseup', InputM.onMouseUp);
+		document.addEventListener('mousemove', InputM.onMouseMove);
+		document.addEventListener('wheel', InputM.onMouseWheel);
+
+		/*
+
+
 		// Listen for keydown events
 		$(document).keydown(event => {
 			for(let command in InputM.keyMap) {
@@ -125,6 +181,7 @@ class InputManager {
 			InputM.mouseMoved = 0;
 
 		});
+		*/
 	}
 
 	/**
@@ -171,10 +228,7 @@ class InputManager {
 	*/
 	zoomIn(factor) {
 		factor = factor || 1.5;
-		RenderM.zoom *= factor;
-		if(RenderM.zoom > 1) {
-			RenderM.zoom = 1;
-		}
+		RenderM.setZoom(Math.min(RenderM.zoom * factor, 1), true);
 	}
 
 	/**
@@ -182,7 +236,7 @@ class InputManager {
 	*/
 	zoomOut(factor) {
 		factor = factor || 1.5;
-		RenderM.zoom /= factor;
+		RenderM.setZoom(RenderM.zoom / factor, true);
 	}
 
 	pauseToggle() {

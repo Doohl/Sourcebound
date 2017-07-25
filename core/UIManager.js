@@ -46,9 +46,7 @@ class UIManager {
 		Handle entire DOM resizing
 	*/
 	resizeDOM() {
-		RenderM._canvas.width = window.innerWidth;
-		RenderM._canvas.height = window.innerHeight;
-		RenderM.renderFrameCanvas2D();
+		RenderM.renderer.resize(window.innerWidth, window.innerHeight);
 	}
 
 

@@ -16,11 +16,11 @@ function NewtonApprox(max, previous, meanAnomaly, eccentricity, errorMargin) {
     A celestial body that has mass, an orbit and other geographic properties.
 */
 class Celestial extends RenderEntity {
-	constructor(pProps, pFillColor) {
+	constructor(pProps, pFillColor, pMinRadius) {
 		super(
 			pProps.name,
 			{'xPos': pProps.xPos, 'yPos': pProps.yPos, 'system': pProps.system},
-			pProps.mass, pProps.radius, pFillColor
+			pProps.mass, pProps.radius, pFillColor, pMinRadius
 		);
 
 		/* Natural satellites directly orbiting this celestial */
@@ -41,6 +41,9 @@ class Celestial extends RenderEntity {
 		if(pProps.orbit) {
 			this.makeOrbital(pProps.orbit);
 		}
+
+		// Set the celestial's graphics
+		RenderM.setGraphics(this);
 	}
 
     /*

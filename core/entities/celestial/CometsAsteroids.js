@@ -1,17 +1,15 @@
 class Comet extends Celestial {
 	constructor(pProps) {
-		super(pProps, '#98A7D6');
+		super(pProps, 0x98A7D6, 1);
 
 		this.eClass = ENTITY.COMET;
-		this.minRadius = 1;
 	}
 }
 
 class Asteroid extends Celestial {
 	constructor(pProps) {
-		super(pProps, '#98A7D6');
+		super(pProps, 0x98A7D6, 1);
 
 		this.eClass = ENTITY.ASTEROID;
-		this.minRadius = 1;
 	}
 }

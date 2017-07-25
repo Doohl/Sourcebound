@@ -81,6 +81,7 @@ class GameManager {
 					let newCoords = entity.computeCoordinates(newTime);
 					entity.xPos = newCoords.xPos;
 					entity.yPos = newCoords.yPos;
+					entity.graphics.position.set(entity.xPos, entity.yPos);
 				}
 
 				// Check for flight solutions

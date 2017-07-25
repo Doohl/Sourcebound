@@ -40,7 +40,7 @@ class Entity {
 */
 
 class RenderEntity extends Entity {
-	constructor(pName, pCoords, pMass, pRadius, pFillColor, pStrokeColor, pStrokeWidth) {
+	constructor(pName, pCoords, pMass, pRadius, pFillColor, pMinRadius) {
 		super(pName);
 
 		this.canRender = true;
@@ -52,16 +52,10 @@ class RenderEntity extends Entity {
 		this.radius = pRadius; // radius of the entity in kilometers
 
 		/* The entity's minimum radius */
-		this.minRadius = 0;
+		this.minRadius = pMinRadius || 0;
 
 		/* Circle fill color */
-		this.fillColor = pFillColor || 'rgb(255, 255, 255)';
-
-		/* Circle stroke color */
-		this.strokeColor = pStrokeColor || 'rgba(255, 255, 255, 0.75)';
-
-		/* Circle stroke width (0 if no width) */
-		this.strokeWidth = pStrokeWidth || 0;
+		this.fillColor = pFillColor || 0xFFFFFF;
 
 		/* x, y coordinates (points to center of circle) */
 		this.xPos = pCoords.xPos || 0; // (0,0) points to center of Star System - the star itself, if unary star system
