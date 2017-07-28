@@ -33,17 +33,19 @@ class RenderManager {
 		RenderM = this;
 
 		/* x, y coordinates of the player camera */
-		RenderM.xPos = 0;
-		RenderM.yPos = 0;
+		this.xPos = 0;
+		this.yPos = 0;
 
 		/* camera speed */
-		RenderM.cameraSpeed = 4; // default movement speed
+		this.cameraSpeed = 4; // default movement speed
 
 		/* Zoom factor of the player camera */
-		RenderM.zoom = 0.000002;
+		this.zoom = 0.000002;
 
 		/* The selected render method */
-		RenderM.renderMethod = 'Canvas2D';
+		this.renderMethod = 'Canvas2D';
+
+		
 
 	}
 
@@ -56,11 +58,7 @@ class RenderManager {
 		RenderM._context = RenderM._canvas.getContext('2d');
 
 		// The render loop (60 fps)
-		if(RenderM.renderMethod) {
-			setInterval(RenderM.renderFrameCanvas2D, 16);
-		} else {
-			setInterval(RenderM.renderFrameWebGL, 16);
-		}
+		this.renderFrameCanvas2D();
 	}
 
 	/**
@@ -91,6 +89,9 @@ class RenderManager {
 			- Powered by Canvas 2D
 	*/
 	renderFrameCanvas2D() {
+		// Begin looping
+		requestAnimationFrame(RenderM.renderFrameCanvas2D);
+
 		// Clear the canvas
 		const context = RenderM._context;
 		context.clearRect(0, 0, RenderM._canvas.width, RenderM._canvas.height);

@@ -5,7 +5,8 @@
 */
 
 $(() => {
-	GameM.clockSet(4.24317e+11);
+
+	GameM.clockSet(1.0092e+11);
 
 	RenderM.initiate();
 	InputM.initiate();
@@ -17,7 +18,8 @@ $(() => {
 	GenerateSystem('test'); // generate a random system
 
 	GameM.paused = true;
-	GameM.increment = Util.EARTH_DAY * 15;
+	GameM.increment = Util.EARTH_DAY * 160;
+
 	setInterval(() => {
 		if(!GameM.paused) {
 			GameM.clockForward(GameM.increment / 66.666666666666666666666666666667);
