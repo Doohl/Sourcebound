@@ -4,7 +4,7 @@
  * Responsible for drawing to the canvas and handling all the
  * related logic.
  * 
- * @module Sourcebound/RenderManager
+ * @module Sourcebound/RenderModule
  */
 
 var RenderM = (function() {
@@ -120,6 +120,15 @@ var RenderM = (function() {
 		},
 
 		/**
+		 * Add a RenderEntity to the list of RenderEntities
+		 * @param {RenderEntity} renderEntity
+		 * 		The RenderEntity to add
+		 */
+		addRenderEntity: function(renderEntity) {
+			_renderEntities.push(renderEntity);
+		},
+
+		/**
 		 * Get the array of Orbits that need to be rendered
 		 * @return {Array.<Orbit>}
 		 * 		The array of Orbits to render
@@ -174,8 +183,9 @@ function renderFrameCanvas() {
 	const canvasCenterY = canvas.height / 2;
 
 	// Center on the target
-	if(GameM.target) {
-		RenderM.setCamera(GameM.target.xPos, GameM.target.yPos);
+	const target = LogicM.getTarget();
+	if(LogicM.getTarget()) {
+		RenderM.setCamera(target.xPos, target.yPos);
 	}
 
 	// Camera coordinates
@@ -241,7 +251,3 @@ function renderFrameCanvas() {
 	}
 
 }
-
-
-
-

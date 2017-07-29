@@ -4,6 +4,7 @@
 	Entry point of the application: load everything up when DOM is ready
 */
 
+/*
 $(() => {
 
 	GameM.clockSet(1.0092e+11);
@@ -26,3 +27,19 @@ $(() => {
 		}
 	}, 15);
 });
+*/
+
+var calledMain = false;
+
+function main() {
+	calledMain = true;
+	
+	RenderM.onDOMReady();
+}
+
+/* Trigger main() when the DOM has fully loaded */
+document.onreadystatechange = function() {
+	if(document.readyState === 'complete' && !calledMain) {
+		main();
+	}
+}
