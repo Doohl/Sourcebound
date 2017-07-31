@@ -4,7 +4,3 @@
 **Sourcebound** is an upcoming sci-fi 4x stategy game written in ECMA6-compliant Javascript. It is currently in early development and will not be properly playable for some time.
 
 To try out the game go to: https://doohl.github.io/Sourcebound/
-
-External dependencies and resources:
-* [jquery](https://jquery.com/)
-* [jquery mousewheel](https://github.com/jquery/jquery-mousewheel)

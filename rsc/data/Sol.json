@@ -1,0 +1,78 @@
+{
+    "name": "Sol",
+    "stellarClass": "G",
+    "colorIndex": 0.656,
+    "absoluteMagnitude": 4.85,
+    "mass": 1,
+    "radius": 1,
+    "temperature": 5778,
+    "luminosity": 1,
+    "age": 4.6,
+    "x": 0,
+    "y": 0,
+    "satellites": [
+    {
+        "name": "Mercury",
+        "radius": 2439.7,
+        "mass": 3.3011e+23,
+        "tilt": 0.034,
+        "orbit": {
+            "semimajorAxis": 57909050,
+            "eccentricity": 0.205630,
+            "epochTime": 0,
+            "epochAnomaly": 174.796,
+            "lAscending": 48.331,
+            "aPeriapsis": 29.124,
+            "inclination": 6.34
+        }
+    },
+    {
+        "name": "Venus",
+        "radius": 6051.8,
+        "mass": 4.8675e+24,
+        "tilt": 177.36,
+        "orbit": {
+            "semimajorAxis": 108208000,
+            "eccentricity": 0.006772,
+            "epochTime": 0,
+            "epochAnomaly": 50.115,
+            "lAscending": 76.680,
+            "aPeriapsis": 54.884,
+            "inclination": 2.19            
+        }
+    },
+    {
+        "name": "Earth",
+        "radius": 6371.0,
+        "mass": 5.97237e+24,
+        "tilt": 23.4392811,
+        "orbit": {
+            "semimajorAxis": 149598023,
+            "eccentricity": 0.0167086,
+            "epochTime": 0,
+            "epochAnomaly": 358.617,
+            "lAscending": -11.26064,
+            "aPeriapsis": 114.20783,
+            "inclination": 1.57869            
+        },
+        "satellites": [
+            {
+                "name": "Luna",
+                "radius": 6371.0,
+                "mass": 5.97237e+24,
+                "tilt": 23.4392811,
+                "orbit": {
+                    "semimajorAxis": 384399,
+                    "eccentricity": 0.0549,
+                    "epochTime": 0,
+                    "epochAnomaly": 126.908833,
+                    "lAscending": -11.26064,
+                    "aPeriapsis": 114.20783,
+                    "inclination": 1.57869            
+                }
+            }
+        ]
+    },
+
+    ]
+}

@@ -1,189 +1,71 @@
-function NewtonApprox(max, previous, meanAnomaly, eccentricity, errorMargin) {
-	let ret = previous;
-	let retPrevious = previous;
-	for(let i = 0; i < max; i++) {
-		retPrevious = ret;
-		ret = ret - (ret - eccentricity * Math.sin(ret) - meanAnomaly) / (1.0 - eccentricity * Math.cos(ret));
-		if(Math.abs(ret - retPrevious) < errorMargin) {
-			break;
-		}
-	}
-	return ret;
-}
-
 
 /**
-    A celestial body that has mass, an orbit and other geographic properties.
-*/
-class Celestial extends RenderEntity {
-	constructor(pProps, pFillColor) {
-		super(
-			pProps.name,
-			{'xPos': pProps.xPos, 'yPos': pProps.yPos, 'system': pProps.system},
-			pProps.mass, pProps.radius, pFillColor
-		);
+ * A table describing a celestial body's physical properties
+ * 
+ * @typedef {Object} CelestialProperties
+ * @property {string} system - The name of the system this celestial belongs to
+ * @property {string} name - The celestial's name
+ * @property {number} mass - The celestial's mass, in kg
+ * @property {number} radius - The celestial's (average) radius, in km
+ * @property {number} tilt - The celestial's axial tilt, in radians
+ * @property {number} rotationalPeriod - How long it takes for this celestial to completely rotate, in hours
+ * @property {Array} [hydrosphere] - The celestial's combined liquids
+ * @property {Object} [atmosphere] - The celestial's combined gasses
+ * @property {KeplerOrbit} [orbit] - The celestial's orbit container
+ */
 
-		/* Natural satellites directly orbiting this celestial */
+/**
+ * A Celestial is any natural body in space. This ranges from planets to moons, stars, asteroids, comets, etc.
+ * @extends RenderEntity
+ */
+class Celestial extends RenderEntity {
+
+	/**
+	 * The Celestial constructor method
+	 * @param {CelestialProperties} props
+	 * 		Defines the default celestial properties 
+	 * @param {string} color 
+	 * 		Defines the celestial's color on the map
+	 */
+	constructor(props, displayProps) {
+		super(props.name, {xPos: 0, yPos: 0, system: props.system}, color);
+
+		/** A list of satellites directly orbitting this celestial, both natural and unnatural */
 		this.satellites = [];
 
-		/* Standard gravitational parameter */
+		/** Mass of the celestial, in kg */
+		this.mass = props.mass;
+
+		/** Standard gravitational parameter */
 		this.standardGrav = Util.G_CONSTANT * this.mass;
 
-		/* Rotational period in hours */
-		this.rotationPeriod = pProps.rotationPeriod;
+		/** Rotational period (in hours) */
+		this.rotationPeriod = props.rotationPeriod;
 
-		/* Hydrosphere defines the combined amount of liquid in this celestial */
-		this.hydrosphere = pProps.hydrosphere;
+		/** The hydrosphere defines the combined amount of liquid in this celestial */
+		this.hydrosphere = props.hydrosphere;
 
-		/* 
+		/** The atmosphere defines the combined amount of gas in this celestial */
+		this.atmosphere = props.atmosphere;
 
-		/* Define orbital data */
-		if(pProps.orbit) {
-			this.makeOrbital(pProps.orbit);
+		/* Define the orbital data */
+		if(props.orbit) {
+			this.setOrbit(props.orbit);
 		}
 	}
 
-    /*
-        Turn this celestial into a 2D orbital
-		input [orbit] Properties:
-			- focus: the entity to orbit around
-			- periapsis: the closest distance to the focus (kilometers)
-			- apoapsis: the furthest distance to the focus (kilometers)
-			- omega: longitude of periapsis, defines location of the periapsis relative to focus (radians)
-			- clockwise: define as true if orbit moves clockwise (false / undefined for counterclockwise)
-			- epochAnomaly: the mean anomaly of this celestial at the J2000 epoch
-    */
-	makeOrbital(orbit) {
-		if(!orbit) return;
-
-		// Eccentricity (e): description of ellipse [0, 1]
-		orbit.eccentricity 		= 1 - 2 / ((orbit.apoapsis / orbit.periapsis) + 1);
-
-		// Semimajor Axis (a): sum of the periapsis and apoapsis divided by two
-		orbit.semimajorAxis		= (orbit.periapsis + orbit.apoapsis) / 2;
-
-		// Semiminor Axis (b): square root of periapsis times apoapsis
-		orbit.semiminorAxis		= Math.sqrt(orbit.periapsis * orbit.apoapsis);
-
-		// Sum of the standard gravitational parameters
-		orbit.standardGravTotal	= this.standardGrav + orbit.focus.standardGrav;
-
-		// Mean Angular Motion (n): function of the angular motion with respect to time
-		orbit.meanAngularMotion	= Math.sqrt(orbit.standardGravTotal / ((orbit.semimajorAxis * 1000) ** 3));
-		if(!orbit.clockwise) {
-			orbit.meanAngularMotion *= -1; // flip the direction of travel if retrograde movement
-		}
-
-		// Orbital period: time it takes to perform one orbit, in years
-		orbit.period			= Math.sqrt( (orbit.semimajorAxis / 1.496e+8)**3 ); // convert a[km] to a[AU]
-
-		orbit.epochAnomaly		= orbit.epochAnomaly || 0;
-
-		orbit.focus.satellites.push(this);
-
-		this.orbit = orbit;
-    }
-
 	/**
-		Get the coordinates for the center of the ellipse representing the orbit
-	*/
-	getOrbitalCenter() {
-		if(!this.orbit) return;
-
-		let x = this.orbit.focus.xPos - (this.orbit.eccentricity * this.orbit.semimajorAxis);
-		let y = this.orbit.focus.yPos;
-		let rotatedPoint = Util.rotatePoint({'xPos': x, 'yPos': y}, this.orbit.focus.xPos, this.orbit.focus.yPos, -this.orbit.omega);
-
-		return {
-			'xPos': rotatedPoint.xPos,
-			'yPos': rotatedPoint.yPos
-		};
-	}
-
-	/**
-		Compute the Eccentric Anomaly (E) of the orbit at [mean anomaly]
-	*/
-	computeEccentricAnomaly(meanAnomaly) {
-		let eccentricAnomaly;
-
-		// Orbits of e>0.8, initial value of pi is used
-		if(this.orbit.eccentricity > 0.9) {
-			eccentricAnomaly = NewtonApprox(1000, Math.PI, meanAnomaly, this.orbit.eccentricity, 10e-15);
-		} else if(this.orbit.eccentricity > 0.8) {
-			eccentricAnomaly = NewtonApprox(500, Math.PI, meanAnomaly, this.orbit.eccentricity, 10e-15);
-		} else {
-			eccentricAnomaly = NewtonApprox(150, meanAnomaly, meanAnomaly, this.orbit.eccentricity, 10e-15);
-		}
-
-		return eccentricAnomaly;
-	}
-
-	/**
-		Compute the Mean Anomaly (M) at [time]
-	*/
-	computeMeanAnomaly(time) {
-		return (this.orbit.meanAngularMotion * time) - this.orbit.epochAnomaly;
-	}
-
-	/**
-		Compute the True Anomaly (theta) of the orbit at [time]
-	*/
-	computeTrueAnomaly(time) {
-		if(!this.orbit) return; // must be an orbital
-
-		// Mean Anomaly (M): mean angular motion times [time]
-		const meanAnomaly = this.computeMeanAnomaly(time);
-
-		// Eccentric Anomaly (E): angular parameter that defines position of celestial along orbit
-		let eccentricAnomaly = this.computeEccentricAnomaly(meanAnomaly);
-
-		// return the True Anomaly
-		return 2 * Math.atan2(
-			Math.sqrt(1 + this.orbit.eccentricity) * Math.sin(eccentricAnomaly / 2),
-			Math.sqrt(1 - this.orbit.eccentricity) * Math.cos(eccentricAnomaly / 2)
-		);
-	}
-
-	/**
-		Compute the (x, y) coordinates of this celestial at a given [time] in seconds
-	*/
-	computeCoordinates(time, detailed) {
-		if(!this.orbit) return;
-
-		let trueAnomaly = this.computeTrueAnomaly(time);
-		const distance = (this.orbit.semimajorAxis * 1000) * ((1 - this.orbit.eccentricity**2) / (1 + this.orbit.eccentricity * Math.cos(trueAnomaly)));
-
-		let x = this.orbit.focus.xPos + (distance / 1000) * Math.cos(trueAnomaly); // convert from m to km
-		let y = this.orbit.focus.yPos + (distance / 1000) * Math.sin(trueAnomaly); // convert from m to km
-
-		let rotatedPoint = Util.rotatePoint({'xPos': x, 'yPos': y}, this.orbit.focus.xPos, this.orbit.focus.yPos, -this.orbit.omega);
-
-		// return the final coordinates
-		if(!detailed) {
-			return {
-				'xPos': rotatedPoint.xPos,
-				'yPos': rotatedPoint.yPos
-			};
-
-		// Return detailed orbital information, as well as coordinates
-		} else {
-			let eccentricAnomaly = this.computeEccentricAnomaly(this.computeMeanAnomaly(time));
-
-			// Instantaneous orbital velocity
-			const velocity = Math.sqrt(this.orbit.standardGravTotal * (this.orbit.semimajorAxis * 1000)) / distance / 1000; // convert m/s to km/s
-
-			// Velocity Vector
-			let vel2D = new Vector(
-				-velocity * Math.sqrt(1 - this.orbit.eccentricity**2) * Math.cos(eccentricAnomaly),
-				-velocity * Math.sin(eccentricAnomaly)
-			);
-			return {
-				'xPos': rotatedPoint.xPos,
-				'yPos': rotatedPoint.yPos,
-				'velocity': vel2D
-			};
+	 * Set this celestial's orbit with the supplied orbital elements
+	 * @param {OrbitalElements} orbitData 
+	 * 		The orbital elements to use in the construction of a KeplerOrbit object
+	 */
+	setOrbit(orbitData) {
+		this.orbit = new KeplerOrbit(orbitData.focus, this, orbitData);
+		if(LogicM.getViewingSystem() == this.system) {
+			RenderM.addRenderOrbit(this.orbit);
 		}
 	}
+
 
 	/**
 		Focus the camera on the celestial when clicked on

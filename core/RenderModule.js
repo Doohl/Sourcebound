@@ -38,7 +38,7 @@ var RenderM = (function() {
 
 	/**
 	 * An array of Orbits that need to be rendered
-	 * @type {Array.<Orbit>}
+	 * @type {Array.<KeplerOrbit>}
 	 */
 	var _renderOrbits = [];
 
@@ -129,12 +129,20 @@ var RenderM = (function() {
 		},
 
 		/**
-		 * Get the array of Orbits that need to be rendered
-		 * @return {Array.<Orbit>}
-		 * 		The array of Orbits to render
+		 * Get the array of KeplerOrbit that need to be rendered
+		 * @return {Array.<KeplerOrbit>}
+		 * 		The array of KeplerOrbit to render
 		 */
 		getRenderOrbits: function() {
 			return _renderOrbits;
+		},
+
+		/**
+		 * Add a KeplerOrbit to the list of rendered orbits
+		 * @param {KeplerOrbit} orbit
+		 */
+		addRenderOrbit: function(orbit) {
+			_renderOrbits.push(orbit);
 		},
 
 		/**

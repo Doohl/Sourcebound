@@ -14,7 +14,7 @@ var LogicM = (function() {
 	var _gameEntities = {};
 
 	/** The name of the star system the player is currently viewing */
-	var _viewingSystem = 0;
+	var _viewingSystem = '';
 
 	/** The entity the player is currently tracking / focused on */
 	var _target = undefined;
@@ -44,8 +44,8 @@ var LogicM = (function() {
 
 		/**
 		 * Get the currently-viewed system
-		 * @return {number}
-		 * 		The ID of the currently-viewed star system
+		 * @return {string}
+		 * 		The name of the currently-viewed star system
 		 */
 		getViewingSystem: function() {
 			return _viewingSystem;
@@ -61,7 +61,8 @@ var LogicM = (function() {
 		},
 
 		/**
-		 * Get a list of game entities by name search [O(n) complexity]
+		 * Get a list of game entities by name search
+		 * 	[O(n) complexity]
 		 * @param {string} name
 		 * 		The name to search for
 		 * @return {Array.<Entity>}
@@ -80,11 +81,14 @@ var LogicM = (function() {
 		},
 
 		/**
-		 * Get a list of game entities by eClass
+		 * Get a list of game entities by eClass.
+		 * 	[O(n) complexity]
 		 * @param {number} eClass
 		 * 		The eClass to search for
 		 * @param {boolean} [exact=false]
 		 * 		If true, perform an EQUALS search, not an AND search 
+		 * @return {Array.<Entity>}
+		 * 		Array of entities with the specified class
 		 */
 		getEntitiesByClass: function(eClass, exact) {
 			let entities = [];
@@ -98,6 +102,17 @@ var LogicM = (function() {
 			return entities;
 		},
 
+		/**
+		 * Get an entity by its specific ID number
+		 * 	[O(1) complexity]
+		 * @param {number} ID
+		 * 		The ID to select
+		 * @return {Entity}
+		 * 		The entity at the specified ID
+		 */
+		getEntityByID: function(ID) {
+			return _gameEntities[ID];
+		},
 
 		/**
 		 * Register an entity and assign it an ID

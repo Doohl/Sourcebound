@@ -1,4 +1,6 @@
-/* Enumerate entity classes */
+/**
+ * Enumerate entity classes
+ */
 const ENTITY = {
 
 	NULL:			0x00,
@@ -35,17 +37,25 @@ const ENTITY = {
  * cultures, empires, etc.
  */
 class Entity {
-	constructor(pName, pCoords) {
+
+	/**
+	 * Entity constructor method
+	 * @param {string} [name]
+	 * 		Defines the name of this entity 
+	 * @param {Coord} [coords] 
+	 * 		Defines the default coordinates of this entity
+	 */
+	constructor(name, coords) {
 
 		/** The entity's non-unique name */
-		this.name = pName || "";
+		this.name = name || "";
 
 		/** The entity's class */
 		this.eClass = ENTITY.NULL;
 
-		if(pCoords) {
+		if(coords) {
 			// Set this entity's location
-			this.setPos(pCoords.xPos, pCoords.yPos, pCoords.system);
+			this.setPos(coords.xPos, coords.yPos, coords.system);
 		}
 
 		// Register this entity to LogicM
@@ -73,30 +83,38 @@ class Entity {
  * @extends Entity
  */
 class RenderEntity extends Entity {
-	constructor(pName, pCoords, pMass, pRadius, pFillColor, pStrokeColor, pStrokeWidth) {
-		super(pName, pCoords);
 
+	/**
+	 * RenderEntity constructor method
+	 * @param {string} name
+	 * 		Defines the name of this entity 
+	 * @param {Coord} coords
+	 * 		Defines the default coordinates of this entity
+	 * @param {Object} displayProps 
+	 * 		Defines the default display properties
+	 * @param {number} displayProps.radius
+	 * 		The radius of the entity's circle, in km.
+	 * @param {number} [displayProps.minRadius]
+	 * 		The minimum possible radius of the entity's circle, in pixels
+	 * @param {string} [displayProps.color]
+	 * 		The entity's render color
+	 */
+	constructor(name, coords, displayProps) {
+		super(name, coords);
+
+		/** Set to true if this entity can be rendered */
 		this.canRender = true;
 
-		/* Entity's mass in kilograms */
-		this.mass = pMass;
+		/** Entity's draw radius */
+		this.radius = displayProps.radius || 0;
 
-		/* Circle radius */
-		this.radius = pRadius; // radius of the entity in kilometers
+		/** Entity's minimum radius */
+		this.minRadius = displayProps.minRadius || 0;
 
-		/* The entity's minimum radius */
-		this.minRadius = 0;
+		/** Entity's draw color */
+		this.color = displayProps.color || '#ffffff';
 
-		/* Circle fill color */
-		this.fillColor = pFillColor || 'rgb(255, 255, 255)';
-
-		/* Circle stroke color */
-		this.strokeColor = pStrokeColor || 'rgba(255, 255, 255, 0.75)';
-
-		/* Circle stroke width (0 if no width) */
-		this.strokeWidth = pStrokeWidth || 0;
-
-		// Register this visible entity to GameM
+		// Register this visible entity to the Logic Module
 		if(LogicM.getViewingSystem() == pCoords.system) {
 			RenderM.addRenderEntity(this);
 		}
