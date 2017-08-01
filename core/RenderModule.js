@@ -81,6 +81,30 @@ var RenderM = (function() {
 		},
 
 		/**
+		 * Set a new zoom factor (with an optional pivot point)
+		 * @param {number} newZoom
+		 * 		The new zoom factor
+		 * @param {Point} [pivotPoint]
+		 * 		If defined, pivot around this x/y coordinate
+		 */
+		setZoom: function(newZoom, pivotPoint) {
+			if(pivotPoint) {
+				const canvasCenterX = window.innerWidth / 2,
+					canvasCenterY = window.innerHeight / 2;
+
+				let oldRealX = ((_xPos * _zoom) + (pivotPoint.xPos - canvasCenterX)) / zoom,
+					oldRealY = ((_yPos * _zoom) + (pivotPoint.yPos - canvasCenterX)) / zoom,
+					newRealX = ((_xPos * newZoom) + (pivotPoint.xPos - canvasCenterX)) / zoom,
+					newRealY = ((_yPos * newZoom) + (pivotPoint.yPos - canvasCenterX)) / zoom;
+				
+				_xPos += oldRealX - newRealX;
+				_yPos += oldRealY - newRealY;
+			}
+
+			_zoom = newZoom;
+		},
+
+		/**
 		 * Get the active canvas
 		 * @return {HTMLCanvasElement}
 		 * 		The active canvas element
@@ -159,7 +183,7 @@ var RenderM = (function() {
 
 }());
 
-// The default alpha value for the orbit ellipse for small celestials
+/** The default alpha value for the orbit ellipse for small celestials */
 const ORBIT_INTENSITY_MOD = [];
 	ORBIT_INTENSITY_MOD[ENTITY.ASTEROID] = 0.05;
 	ORBIT_INTENSITY_MOD[ENTITY.COMET] = 0.1;

@@ -35,6 +35,7 @@ function main() {
 	calledMain = true;
 	
 	RenderM.onDOMReady();
+	InputM.onDOMReady();
 }
 
 /* Trigger main() when the DOM has fully loaded */

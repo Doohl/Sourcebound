@@ -1,6 +1,6 @@
 
 /**
- * A table describing a celestial body's physical properties
+ * A table describing a celestial body's orbital properties
  * 
  * @typedef {Object} OrbitalElements
  * @property {number} semimajorAxis - (a) The orbit's semimajor axis in km
@@ -13,7 +13,7 @@
  *         (Must be defined if `lPeriapsis` is not defined)
  * @property {number} [aPeriapsis] - (ω) The orbit's argument of the periapsis in rads.
  *         (Must be defined if `lPeriapsis` is not defined)
- * @property {number} [inclination] - (i) The orbit's tilt to the invariable plane in rads. Not actually taken into considering in our 2D Kepler calculations.
+ * @property {number} [inclination] - (i) The orbit's tilt to the invariable plane in rads. Not taken into consideration in our 2D Kepler calculations.
  * @property {boolean} [clockwise] - If true, the orbit will travel clockwise. Else, counter-clockwise.
  * 
  */

@@ -1,3 +1,9 @@
+
+/**
+ * A 32-bit unsigned bitfield that describes an entity's classification(s)
+ * @typedef {number} EntityClass
+ */
+
 /**
  * Enumerate entity classes
  */
@@ -14,21 +20,24 @@ const ENTITY = {
 	BLACKHOLE:		0x20,		// a object dense enough to maintain an event horizon
 
 	// Celestial modifiers
-	GAS:			0x40,		// is a gas giant / gas planet
-	DWARF:			0x80,		// is a "dwarf" in its category
-	NEUTRON:		0x100,		// is a neutron star
+	GAS:			0x40,		// is a gas giant / gas world
+	ICE:			0x80,		// is an ice giant / ice world
+	DESERT:			0x100,		// is a desert world
+	DWARF:			0x200,		// is a "dwarf" in its category
+	GIANT:			0x400,		// is a "giant" in its category
+	NEUTRON:		0x800,		// is a composed of "neutronium" (ie neutron stars)
 
 
 	// Empire Units
-	VESSEL:			0x200,		// a vessel is any empire-made object, manned or unmanned
-		SHIP:		0x400,		// a ship is a manned vessel equipped with engines
-		DRONE:		0x800,		// a drone is an unmanned vessel equipped with engines
-		STATION:	0x1000,		// a station is a large habitable vessel with reduced maneuverability (if any) - can be orbital or ground-based
+	VESSEL:			0x1000,		// a vessel is any empire-made object, manned or unmanned
+		SHIP:		0x2000,		// a ship is a manned vessel equipped with engines
+		DRONE:		0x4000,		// a drone is an unmanned vessel equipped with engines
+		STATION:	0x8000,		// a station is a large habitable vessel with reduced maneuverability (if any) - can be orbital or ground-based
 
-		MILITARY:	0x2000,		// a military vessel belongs to an empire's military
+		MILITARY:	0x10000,		// a military vessel belongs to an empire's military
 		
 	
-	COLONY:			0x4000		// a colony is a ground-based civilian population
+	COLONY:			0x20000		// a colony is a ground-based civilian population
 };
 
 
@@ -44,14 +53,16 @@ class Entity {
 	 * 		Defines the name of this entity 
 	 * @param {Coord} [coords] 
 	 * 		Defines the default coordinates of this entity
+	 * @param {EntityClass} [eClass]
+	 * 		Defines this entity's eClass
 	 */
-	constructor(name, coords) {
+	constructor(name, coords, eClass) {
 
 		/** The entity's non-unique name */
 		this.name = name || "";
 
 		/** The entity's class */
-		this.eClass = ENTITY.NULL;
+		this.eClass = eClass || ENTITY.NULL;
 
 		if(coords) {
 			// Set this entity's location
@@ -78,6 +89,16 @@ class Entity {
 	}
 }
 
+
+/**
+ * A table describing an entity's display properties
+ * 
+ * @typedef {Object} DisplayProperties
+ * @property {number} radius - The entity's real radius, in km
+ * @property {number} [minRadius=0] - The entity's minimum draw radius, in pixels
+ * @property {string} [color=#ffffff] - The entity's draw color
+ */
+
 /**
  * A RenderEntity is an entity that structures render data. It can be drawn onto the screen.
  * @extends Entity
@@ -90,17 +111,13 @@ class RenderEntity extends Entity {
 	 * 		Defines the name of this entity 
 	 * @param {Coord} coords
 	 * 		Defines the default coordinates of this entity
-	 * @param {Object} displayProps 
+	 * @param {DisplayProperties} displayProps 
 	 * 		Defines the default display properties
-	 * @param {number} displayProps.radius
-	 * 		The radius of the entity's circle, in km.
-	 * @param {number} [displayProps.minRadius]
-	 * 		The minimum possible radius of the entity's circle, in pixels
-	 * @param {string} [displayProps.color]
-	 * 		The entity's render color
+	 * @param {EntityClass} [eClass]
+	 * 		Defines this entity's eClass
 	 */
-	constructor(name, coords, displayProps) {
-		super(name, coords);
+	constructor(name, coords, displayProps, eClass) {
+		super(name, coords, eClass);
 
 		/** Set to true if this entity can be rendered */
 		this.canRender = true;
@@ -112,7 +129,7 @@ class RenderEntity extends Entity {
 		this.minRadius = displayProps.minRadius || 0;
 
 		/** Entity's draw color */
-		this.color = displayProps.color || '#ffffff';
+		this.color = displayProps.color || 'white';
 
 		// Register this visible entity to the Logic Module
 		if(LogicM.getViewingSystem() == pCoords.system) {
