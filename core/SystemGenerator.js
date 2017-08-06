@@ -23,3 +23,14 @@ function GenerateSystem(pStar, pForceLife) {
 
     }
 }
+
+/** 
+ * Generate a star system from a JSON file
+ */
+function ReadSystem(file) {
+    fetch(file).then(response => {
+        return response.json();
+    }).then(systemJSON => {
+        loadCelestialData(systemJSON);
+    });
+}

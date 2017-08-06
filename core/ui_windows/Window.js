@@ -5,13 +5,13 @@ class Window {
     constructor(pSelector, pCloseable) {
 
         // The DOM element pertaining to this Window
-        this.element = $(pSelector)[0];
+        this.element = document.querySelector(pSelector);
 
         // This window's header
-        this.header = $(pSelector + " > .ui-window-header")[0];
+        this.header = document.querySelector(pSelector + " > .ui-window-header");
         
         // This window's body
-        this.body = $(pSelector + "> .ui-window-body")[0];
+        this.body = document.querySelector(pSelector + "> .ui-window-body");
 
         // This window's minimize button
         

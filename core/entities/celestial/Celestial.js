@@ -42,7 +42,7 @@ class Celestial extends RenderEntity {
 	 * 		Defines this entity's eClass
 	 */
 	constructor(props, color, eClass) {
-		super(props.name, {xPos: 0, yPos: 0, system: props.system}, {color: color}, eClass);
+		super(props.name, {xPos: 0, yPos: 0, system: props.system}, {color: color, radius: props.radius}, eClass);
 
 		/** A list of satellites directly orbitting this celestial, both natural and unnatural */
 		this.satellites = [];
@@ -191,7 +191,7 @@ function loadCelestialData(data, parent) {
 	// This celestial is a star
 	if(data.stellarClass) {
 		entityClass = ENTITY.STAR;
-		entityColor = computeColorBV(data.colorIndex)
+		entityColor = computeColorBV(data.colorIndex);
 	} else {
 		entityClass = getClass(data);
 		entityColor = '#98A7D6';
@@ -206,12 +206,82 @@ function loadCelestialData(data, parent) {
 	celestial.minRadius = 5;
 
 	// Check to see if we need to iterate through any satellites
-	if(celestial.satellites) {
-		for(let index = 0, len = celestial.satellites.length; index < len; index++) {
-			let satelliteData = celestial.satellites[index];
-			celestial.satellites[index] = loadCelestialData(satelliteData);
+	if(data.satellites) {
+		for(let index = 0, len = data.satellites.length; index < len; index++) {
+			let satelliteData = data.satellites[index];
+			satelliteData.system = celestial.system;
+			data.satellites[index] = loadCelestialData(satelliteData, celestial);
+			console.log(data.satellites[index]);
 		}
 	}
 
 	return celestial;
+}
+
+
+
+const COLOR_INDEXES = [
+	[2.00, '#ff5200'],
+	[1.95, '#ff7b00'],
+	[1.90, '#ff9523'],
+	[1.85, '#ffa94b'],
+	[1.80, '#ffb765'],
+	[1.75, '#ffc178'],
+	[1.70, '#ffc885'],
+	[1.65, '#ffcc8f'],
+	[1.60, '#ffd096'],
+	[1.55, '#ffd29c'],
+	[1.50, '#ffd5a1'],
+	[1.45, '#ffd6a5'],
+	[1.40, '#ffd8a9'],
+	[1.35, '#ffdaad'],
+	[1.30, '#ffdbb0'],
+	[1.25, '#ffddb4'],
+	[1.20, '#ffdfb8'],
+	[1.15, '#ffe0bb'],
+	[1.10, '#ffe2bf'],
+	[1.05, '#ffe3c3'],
+	[1.00, '#ffe5c6'],
+	[0.95, '#ffe6ca'],
+	[0.90, '#ffe8ce'],
+	[0.85, '#ffe9d2'],
+	[0.80, '#ffebd6'],
+	[0.75, '#ffeddb'],
+	[0.70, '#ffefe0'],
+	[0.65, '#fff1e5'],
+	[0.60, '#fff3ea'],
+	[0.55, '#fff5ef'],
+	[0.50, '#fff7f5'],
+	[0.45, '#fff9fb'],
+	[0.40, '#fef9ff'],
+	[0.35, '#f8f6ff'],
+	[0.30, '#f3f2ff'],
+	[0.25, '#eeefff'],
+	[0.20, '#e9ecff'],
+	[0.15, '#e4e9ff'],
+	[0.10, '#dfe5ff'],
+	[0.05, '#dae2ff'],
+	[0.00, '#d3ddff'],
+	[-0.05, '#ccd8ff'],
+	[-0.10, '#c4d2ff'],
+	[-0.15, '#bbccff'],
+	[-0.20, '#b2c5ff'],
+	[-0.25, '#aabfff'],
+	[-0.30, '#a3b9ff'],
+	[-0.35, '#9eb5ff'],
+	[-0.40, '#9bb2ff']
+]
+
+function computeColorBV(bvIndex) {
+	let leastDiff;
+	let leastColor;
+	for(let entry of COLOR_INDEXES) {
+		let diff = Math.abs(entry[0] - bvIndex);
+		if(leastDiff === undefined || diff < leastDiff) {
+			leastDiff = diff;
+			leastColor = entry[1];
+		}
+	}
+	console.log(leastColor);
+	return leastColor;
 }

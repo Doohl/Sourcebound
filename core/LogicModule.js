@@ -124,6 +124,15 @@ var LogicM = (function() {
 			_gameEntities[entity.ID] = entity;
 		},
 
+		/**
+		 * Change the currently-viewed system
+		 * @param {string} system
+		 * 		The new system to view
+		 */
+		setViewingSystem: function(system) {
+			_viewingSystem = system;
+		},
+
 		/** 
 		 * Advance time by a given increment
 		 * @param {number} dT
@@ -133,13 +142,15 @@ var LogicM = (function() {
 			_universeClock += dT;
 
 			let entity;
-			for(let index = 0; index < _idIncrement; i++) {
-				entity = _gameEntities[index];
+			for(let i = 0; i < _idIncrement; i++) {
+				entity = _gameEntities[i];
 				if(!entity.inactive) {
 
 					// Advance orbit
 					if(entity.orbit) {
-						entity.orbit.update(_universeClock);
+						const newPos = entity.orbit.computeCoordinates(_universeClock);
+						entity.setPos(newPos.xPos, newPos.yPos);
+						//entity.orbit.update(_universeClock);
 					}
 
 				}

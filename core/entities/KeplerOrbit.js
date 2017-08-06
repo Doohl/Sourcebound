@@ -6,14 +6,14 @@
  * @property {number} semimajorAxis - (a) The orbit's semimajor axis in km
  * @property {number} eccentricity - (e) The orbit's eccentricity
  * @property {number} epochTime - This orbit's epoch, as number of seconds since Epoch J2000
- * @property {number} epochAnomaly - (n) This orbit's mean anomaly at the defined epochTime
- * @property {number} [lPeriapsis] - (ϖ) The orbit's longitude of the periapsis in rads.
+ * @property {number} epochAnomaly - (n) This orbit's mean anomaly at the defined epochTime in deg
+ * @property {number} [lPeriapsis] - (ϖ) The orbit's longitude of the periapsis in deg.
  *         (If it's not defined, `lAscending` and `aPeriapsis` must be defined)
- * @property {number} [lAscending] - (Ω) The orbit's longitude of the ascending node in rads.
+ * @property {number} [lAscending] - (Ω) The orbit's longitude of the ascending node in deg.
  *         (Must be defined if `lPeriapsis` is not defined)
- * @property {number} [aPeriapsis] - (ω) The orbit's argument of the periapsis in rads.
+ * @property {number} [aPeriapsis] - (ω) The orbit's argument of the periapsis in deg.
  *         (Must be defined if `lPeriapsis` is not defined)
- * @property {number} [inclination] - (i) The orbit's tilt to the invariable plane in rads. Not taken into consideration in our 2D Kepler calculations.
+ * @property {number} [inclination] - (i) The orbit's tilt to the invariable plane in deg. Not taken into consideration in our 2D Kepler calculations.
  * @property {boolean} [clockwise] - If true, the orbit will travel clockwise. Else, counter-clockwise.
  * 
  */
@@ -44,23 +44,26 @@ class KeplerOrbit {
         this.semimajorAxis = data.semimajorAxis;
 
         /** Periapsis: the closest distance to the focus */
-        this.periapsis = this.semimajorAxis * (1 - data.eccentricity);
+        this.periapsis = this.semimajorAxis * (1 - this.eccentricity);
 
         /** Apoapsis: the furthest distance from the focus */
-        this.apoapsis = this.semimajorAxis * (1 + data.eccentricity);
+        this.apoapsis = this.semimajorAxis * (1 + this.eccentricity);
 
         /** Semiminor Axis (b): square root of the periapsis times apoapsis */
-        this.semiminorAxis = Math.sqrt(this.periapsis + this.apoapsis);
+        this.semiminorAxis = Math.sqrt(this.periapsis * this.apoapsis);
+
+        this.aPeriapsis = Util.toRad(data.aPeriapsis);
+        this.lAscending = Util.toRad(data.lAscending);
 
         /** Longitude of the Periapsis (ϖ): defines the location of the periapsis relative to the focus */
         if(data.lPeriapsis) {
-            this.lPeriapsis = data.lPeriapsis;
+            this.lPeriapsis = this.lPeriapsis;
         } else {
-            this.lPeriapsis = data.lAscending + data.aPeriapsis;
+            this.lPeriapsis = this.lAscending + this.aPeriapsis;
         }
 
         /** Inclination (i): the tilt of an orbit around the focus celestial */
-        this.inclination = data.inclination;
+        this.inclination = Util.toRad(data.inclination);
 
         /** The sum of the standard gravitational parameters */
         this.standardGravTotal = focus.standardGrav + parent.standardGrav;
@@ -72,11 +75,11 @@ class KeplerOrbit {
         }
         
         /** Orbital period (T): time for one revolution, in years */
-        this.period = Math.sqrt( (orbit.semimajorAxis / 1.496e+8)**3 ); // convert a[km] to a[AU]
+        this.period = Math.sqrt( (this.semimajorAxis / 1.496e+8)**3 ); // convert a[km] to a[AU]
         
         /** The initial epoch elements */
         this.epochTime = data.epochTime;
-        this.epochAnomaly = data.epochAnomaly || 0;
+        this.epochAnomaly = Util.toRad(data.epochAnomaly || 0);
 
         /** Add the parent to focus' list of satellites */
         focus.satellites.push(parent);
@@ -113,7 +116,7 @@ class KeplerOrbit {
 		// Orbits of e>0.8, initial value of pi is used
 		if(this.eccentricity > 0.9) {
 			eccentricAnomaly = NewtonApprox(1000, Math.PI, meanAnomaly, this.eccentricity, 10e-15);
-		} else if(this.orbit.eccentricity > 0.8) {
+		} else if(this.eccentricity > 0.8) {
 			eccentricAnomaly = NewtonApprox(500, Math.PI, meanAnomaly, this.eccentricity, 10e-15);
 		} else {
 			eccentricAnomaly = NewtonApprox(150, meanAnomaly, meanAnomaly, this.eccentricity, 10e-15);

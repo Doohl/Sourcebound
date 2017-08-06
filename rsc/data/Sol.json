@@ -3,13 +3,14 @@
     "stellarClass": "G",
     "colorIndex": 0.656,
     "absoluteMagnitude": 4.85,
-    "mass": 1,
-    "radius": 1,
+    "mass": 1.98855e+30,
+    "radius": 695700,
     "temperature": 5778,
     "luminosity": 1,
     "age": 4.6,
     "x": 0,
     "y": 0,
+    "system": "Sol",
     "satellites": [
     {
         "name": "Mercury",
@@ -72,7 +73,7 @@
                 }
             }
         ]
-    },
+    }
 
     ]
 }

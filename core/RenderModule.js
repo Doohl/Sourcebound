@@ -89,14 +89,14 @@ var RenderM = (function() {
 		 */
 		setZoom: function(newZoom, pivotPoint) {
 			if(pivotPoint) {
-				const canvasCenterX = window.innerWidth / 2,
-					canvasCenterY = window.innerHeight / 2;
+				const canvasCenterX = _canvas.width / 2,
+					canvasCenterY = _canvas.height / 2;
 
-				let oldRealX = ((_xPos * _zoom) + (pivotPoint.xPos - canvasCenterX)) / zoom,
-					oldRealY = ((_yPos * _zoom) + (pivotPoint.yPos - canvasCenterX)) / zoom,
-					newRealX = ((_xPos * newZoom) + (pivotPoint.xPos - canvasCenterX)) / zoom,
-					newRealY = ((_yPos * newZoom) + (pivotPoint.yPos - canvasCenterX)) / zoom;
-				
+				let oldRealX = ((_xPos * _zoom) + (pivotPoint.xPos - canvasCenterX)) / _zoom,
+					oldRealY = ((_yPos * _zoom) + (pivotPoint.yPos - canvasCenterY)) / _zoom,
+					newRealX = ((_xPos * newZoom) + (pivotPoint.xPos - canvasCenterX)) / newZoom,
+					newRealY = ((_yPos * newZoom) + (pivotPoint.yPos - canvasCenterY)) / newZoom;
+
 				_xPos += oldRealX - newRealX;
 				_yPos += oldRealY - newRealY;
 			}
@@ -228,7 +228,7 @@ function renderFrameCanvas() {
 
 	// First, iterate through the orbits
 	let orbit;
-	for(let index = 0, len = renderOrbits.length; index < len; i++) {
+	for(let i = 0, len = renderOrbits.length; i < len; i++) {
 		orbit = renderOrbits[i];
 
 		const orbitCenter = orbit.getCenter();
@@ -241,21 +241,22 @@ function renderFrameCanvas() {
 			orbitAlpha = 1;
 		}
 		
-		if(ORBIT_INTENSITY_MOD[orbit.entity.eClass]) {
-			orbitAlpha *= ORBIT_INTENSITY_MOD[orbit.entity.eClass];
-		}
+		//if(ORBIT_INTENSITY_MOD[orbit.entity.eClass]) {
+		//	orbitAlpha *= ORBIT_INTENSITY_MOD[orbit.entity.eClass];
+		//}
 
 		if(orbitAlpha > 0) {
 			context.beginPath();
 			context.strokeStyle = 'rgba(113,117,130,' + orbitAlpha + ')';
-			context.ellipse(drawCenterX, drawCenterY, orbit.semimajorAxis * zoom, orbit.semiminorAxis * zoom, -orbit.omega, 0, 2 * Math.PI);
+			console.log(orbit.lPeriapsis);
+			context.ellipse(drawCenterX, drawCenterY, orbit.semimajorAxis * zoom, orbit.semiminorAxis * zoom, -orbit.lPeriapsis, 0, 2 * Math.PI);
 			context.stroke();
 		}
 	}
 
 	// Iterate through the renderEntities
 	let entity;
-	for(let index = 0, len = renderEntities.length; index < len; i++) {
+	for(let i = 0, len = renderEntities.length; i < len; i++) {
 		entity = renderEntities[i];
 
 		const drawRadius = Math.max(entity.minRadius, entity.radius * zoom);
@@ -268,7 +269,7 @@ function renderFrameCanvas() {
 
 		context.beginPath();
 		context.arc(drawX, drawY, drawRadius, 0, 2 * Math.PI);
-		context.fillStyle = entity.fillColor;
+		context.fillStyle = entity.color;
 		context.fill();
 
 		// Draw the entity's name

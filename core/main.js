@@ -36,6 +36,20 @@ function main() {
 	
 	RenderM.onDOMReady();
 	InputM.onDOMReady();
+	UIM.onDOMReady();
+
+	LogicM.setViewingSystem('Sol');
+
+	ReadSystem('./rsc/data/Sol.json');
+
+	LogicM.paused = false;
+	LogicM.increment = Util.EARTH_DAY * 20;
+
+	setInterval(() => {
+		if(!LogicM.paused) {
+			LogicM.clockForward(LogicM.increment / 66.666666666666666666666666666667);
+		}
+	}, 15);
 }
 
 /* Trigger main() when the DOM has fully loaded */

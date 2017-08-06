@@ -100,8 +100,8 @@ var InputM = (function() {
 
 		// Pivot point
 		let pivotPoint = {
-			xPos: _xPos,
-			yPos: _yPos
+			xPos: event.pageX,
+			yPos: event.pageY
 		};
 
 		if(event.deltaY > 0) {

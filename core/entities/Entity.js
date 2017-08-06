@@ -79,13 +79,13 @@ class Entity {
 	 * 		The new x coordinate 
 	 * @param {number} yPos 
 	 * 		The new y coordinate
-	 * @param {string} system 
+	 * @param {string} [system] 
 	 * 		The name of the star system 
 	 */
 	setPos(xPos, yPos, system) {
 		this.xPos = xPos || 0;
 		this.yPos = yPos || 0;
-		this.system = system;
+		this.system = system || this.system;
 	}
 }
 
@@ -132,7 +132,7 @@ class RenderEntity extends Entity {
 		this.color = displayProps.color || 'white';
 
 		// Register this visible entity to the Logic Module
-		if(LogicM.getViewingSystem() == pCoords.system) {
+		if(LogicM.getViewingSystem() == coords.system) {
 			RenderM.addRenderEntity(this);
 		}
 	}

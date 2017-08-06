@@ -1,3 +1,6 @@
+
+
+
 var Util;
 
 /**
@@ -114,6 +117,10 @@ class Utilities {
 			month: 'long',
 			day: 'numeric'
 		});
+	}
+
+	toRad(degrees) {
+		return degrees * Math.PI / 180;
 	}
 }
 
