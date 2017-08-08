@@ -75,16 +75,16 @@ class Entity {
 
 	/**
 	 * 
-	 * @param {number} xPos
+	 * @param {number} [xPos=0]
 	 * 		The new x coordinate 
-	 * @param {number} yPos 
+	 * @param {number} [yPos=0] 
 	 * 		The new y coordinate
 	 * @param {string} [system] 
 	 * 		The name of the star system 
 	 */
-	setPos(xPos, yPos, system) {
-		this.xPos = xPos || 0;
-		this.yPos = yPos || 0;
+	setPos(xPos=0, yPos=0, system) {
+		this.xPos = xPos;
+		this.yPos = yPos;
 		this.system = system || this.system;
 	}
 }

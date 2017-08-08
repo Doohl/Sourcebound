@@ -14,6 +14,7 @@
  * @property {number} [aPeriapsis] - (ω) The orbit's argument of the periapsis in deg.
  *         (Must be defined if `lPeriapsis` is not defined)
  * @property {number} [inclination] - (i) The orbit's tilt to the invariable plane in deg. Not taken into consideration in our 2D Kepler calculations.
+ * @property {number} [precession] - (ε) The orbit's apsidal precession in deg.
  * @property {boolean} [clockwise] - If true, the orbit will travel clockwise. Else, counter-clockwise.
  * 
  */
@@ -42,6 +43,11 @@ class KeplerOrbit {
 
         /** Semimajor Axis (a): sum of the periapsis and apoapsis divided by two */
         this.semimajorAxis = data.semimajorAxis;
+
+        // The semimajor axis is probably in AU:
+        if(this.semimajorAxis <= focus.radius) {
+            this.semimajorAxis = Util.toAU(this.semimajorAxis);
+        }
 
         /** Periapsis: the closest distance to the focus */
         this.periapsis = this.semimajorAxis * (1 - this.eccentricity);
@@ -80,6 +86,14 @@ class KeplerOrbit {
         /** The initial epoch elements */
         this.epochTime = data.epochTime;
         this.epochAnomaly = Util.toRad(data.epochAnomaly || 0);
+
+        /** The apsidal precession [general relativity] (ε): a gradual rotation of the longitude of periapsis */
+        if(data.precession) {
+            this.precession = Util.toRad(data.precession);
+        } else {
+            this.precession = 0;
+            //this.precession = 24 * Math.pow(Math.PI, 3) * Math.pow(this.semimajorAxis * 1000, 2) / ();
+        }
 
         /** Add the parent to focus' list of satellites */
         focus.satellites.push(parent);

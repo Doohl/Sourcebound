@@ -18,3 +18,9 @@
  * @property {number} yPos - The y coordinate
  * @property {string} system - The name of the star system
  */
+
+/**
+ * Represents an HTTP URL
+ * 
+ * @typedef {string} URL
+ */

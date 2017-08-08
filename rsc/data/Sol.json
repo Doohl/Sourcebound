@@ -39,11 +39,11 @@
             "epochAnomaly": 50.115,
             "lAscending": 76.680,
             "aPeriapsis": 54.884,
-            "inclination": 2.19            
+            "inclination": 2.19
         }
     },
     {
-        "name": "Earth",
+        "name": "Terra",
         "radius": 6371.0,
         "mass": 5.97237e+24,
         "tilt": 23.4392811,
@@ -54,22 +54,54 @@
             "epochAnomaly": 358.617,
             "lAscending": -11.26064,
             "aPeriapsis": 114.20783,
-            "inclination": 1.57869            
+            "inclination": 1.57869
         },
         "satellites": [
             {
                 "name": "Luna",
-                "radius": 6371.0,
-                "mass": 5.97237e+24,
-                "tilt": 23.4392811,
+                "radius": 1737.1,
+                "mass": 7.342e+22,
+                "tilt": 1.5424,
                 "orbit": {
                     "semimajorAxis": 384399,
                     "eccentricity": 0.0549,
                     "epochTime": 0,
                     "epochAnomaly": 126.908833,
-                    "lAscending": -11.26064,
-                    "aPeriapsis": 114.20783,
-                    "inclination": 1.57869            
+                    "lAscending": 125.08,
+                    "aPeriapsis": 318.15,
+                    "inclination": 5.15
+                }
+            }
+        ]
+    },
+    {
+        "name": "Mars",
+        "radius": 3389.5,
+        "mass": 6.4171e+23,
+        "tilt": 25.19,
+        "orbit": {
+            "semimajorAxis": 1.523679,
+            "eccentricity": 0.0934,
+            "epochTime": 0,
+            "epochAnomaly": 19.373,
+            "lAscending": 49.558,
+            "aPeriapsis": 286.502,
+            "inclination": 1.67
+        },
+        "satellites": [
+            {
+                "name": "Phobos",
+                "radius": 11.2667,
+                "mass": 1.0659e+16,
+                "tilt": 0,
+                "orbit": {
+                    "semimajorAxis": 9376,
+                    "eccentricity": 0.0151,
+                    "epochTime": 0,
+                    "epochAnomaly": 126.908833,
+                    "lAscending": 164.931,
+                    "aPeriapsis": 150.247,
+                    "inclination": 1.075
                 }
             }
         ]

@@ -24,10 +24,16 @@ var RenderM = (function() {
 	/** The current render method */
 	var _renderMethod = 'Canvas';
 
-	/** The attached canvas */
+	/** 
+	 * The attached canvas
+	 * @type {HTMLCanvasElement} 
+	 */
 	var _canvas;
 
-	/** The 2D context to draw to */
+	/** 
+	 * The 2D context to draw to 
+	 * @type {CanvasRenderingContext2D}
+	*/
 	var _context;
 
 	/** 
@@ -175,6 +181,10 @@ var RenderM = (function() {
 		onDOMReady: function() {
 			_canvas = document.getElementById('canvas');
 			_context = _canvas.getContext('2d');
+			_context.imageSmoothingEnabled = false;
+			_context.mozImageSmoothingEnabled = false;
+			_context.webkitImageSmoothingEnabled = false;
+			_context.msImageSmoothingEnabled = false;
 
 			// Begin the render loop
 			renderFrameCanvas();
@@ -248,8 +258,9 @@ function renderFrameCanvas() {
 		if(orbitAlpha > 0) {
 			context.beginPath();
 			context.strokeStyle = 'rgba(113,117,130,' + orbitAlpha + ')';
-			console.log(orbit.lPeriapsis);
+			//console.time('ellipse');
 			context.ellipse(drawCenterX, drawCenterY, orbit.semimajorAxis * zoom, orbit.semiminorAxis * zoom, -orbit.lPeriapsis, 0, 2 * Math.PI);
+			//console.timeEnd('ellipse');
 			context.stroke();
 		}
 	}

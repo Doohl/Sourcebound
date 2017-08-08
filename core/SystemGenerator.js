@@ -25,12 +25,20 @@ function GenerateSystem(pStar, pForceLife) {
 }
 
 /** 
- * Generate a star system from a JSON file
+ * Generate a star system from a JSON file. 
+ * Returns a promise that resolves the root Celestial of the star system
+ * @param {URL} file
+ *      The json file to read
+ * @return {Promise.<Celestial>}
+ *      A promise that resolves the root Celestial
  */
 function ReadSystem(file) {
-    fetch(file).then(response => {
-        return response.json();
-    }).then(systemJSON => {
-        loadCelestialData(systemJSON);
-    });
+    return new Promise((resolve, reject) => {
+		fetch(file).then(response => {
+            return response.json();
+        }).then(systemJSON => {
+            let celestial = loadCelestialData(systemJSON);
+            resolve(celestial);
+        });
+	});
 }

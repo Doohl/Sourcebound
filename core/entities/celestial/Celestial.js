@@ -211,7 +211,6 @@ function loadCelestialData(data, parent) {
 			let satelliteData = data.satellites[index];
 			satelliteData.system = celestial.system;
 			data.satellites[index] = loadCelestialData(satelliteData, celestial);
-			console.log(data.satellites[index]);
 		}
 	}
 

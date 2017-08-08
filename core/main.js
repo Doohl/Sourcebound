@@ -40,16 +40,28 @@ function main() {
 
 	LogicM.setViewingSystem('Sol');
 
-	ReadSystem('./rsc/data/Sol.json');
 
-	LogicM.paused = false;
-	LogicM.increment = Util.EARTH_DAY * 20;
+	/* Load all of the default system json files */
+	let defaultSystems = [
+		'./rsc/data/Sol.json'
+	];
+	let promises = defaultSystems.map(url => {
+		return ReadSystem(url);
+	});
 
-	setInterval(() => {
-		if(!LogicM.paused) {
-			LogicM.clockForward(LogicM.increment / 66.666666666666666666666666666667);
-		}
-	}, 15);
+	/* Once all the files are loaded, begin the game */
+	Promise.all(promises).then(() => {
+		LogicM.paused = true;
+		LogicM.increment = Util.EARTH_DAY * 2;
+
+		setInterval(() => {
+			if(!LogicM.paused) {
+				LogicM.clockForward(LogicM.increment / 66.666666666666666666666666666667);
+			}
+		}, 15);
+
+		LogicM.clockForward(1);
+	});
 }
 
 /* Trigger main() when the DOM has fully loaded */
