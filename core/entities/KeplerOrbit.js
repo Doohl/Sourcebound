@@ -46,7 +46,7 @@ class KeplerOrbit {
 
         // The semimajor axis is probably in AU:
         if(this.semimajorAxis <= focus.radius) {
-            this.semimajorAxis = Util.toAU(this.semimajorAxis);
+            this.semimajorAxis = Util.toKm(this.semimajorAxis);
         }
 
         /** Periapsis: the closest distance to the focus */

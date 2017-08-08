@@ -25,7 +25,7 @@ var Util = (function() {
 		EARTH_YEAR: 3.154e+7,
 
 		/** Conversion factor from AU to km */
-		AU: 1.496e+8,
+		AU: 149598023,
 
 		/** Conversion factor from degrees to radians */
 		DEG: 0.0174533,
@@ -150,7 +150,18 @@ var Util = (function() {
 		 * 		Output AU
 		 */
 		toAU(km) {
-			return km * this.AU;
+			return km / this.AU;
+		},
+
+		/**
+		 * Convert AU (astronomical units) to km (kilometers)
+		 * @param {number} AU
+		 * 		Input AU
+		 * @return {number}
+		 * 		Output km
+		 */
+		toKm(AU) {
+			return AU * this.AU;
 		},
 
 		/** 

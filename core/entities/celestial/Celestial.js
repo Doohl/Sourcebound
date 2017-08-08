@@ -16,14 +16,51 @@
  */
 
 /** 
- * Attempt to determine an entity's class based off its Celestial Properties
+ * Attempt to determine an Celestial's eClass based off its Celestial Properties
  * @param {CelestialProperties} props
  * 		The celestial properties to analyze
  * @return {EntityClass}
  * 		The Entity Class to return
  */
 function getClass(props) {
-	return ENTITY.PLANET;
+	let eClass = 0;
+
+	// Check if this celestial is a moon
+	if(props.orbit.focus && props.orbit.focus.eClass != ENTITY.STAR) {
+		eClass |= ENTITY.MOON;
+	}
+
+	// A celestial is considered for Planetary status at >=300km radius (large enough to be rounded)
+	if(props.radius >= 300) {
+		// Celestial receives Planetary status
+		if(!(eClass & ENTITY.MOON)) {
+			eClass |= ENTITY.PLANET;
+
+			// Check against the Margot discriminant (Π) to see if celestial can 'clear neighborhood'
+			let semimajorAxis = props.orbit.semimajorAxis;
+			if(semimajorAxis > props.orbit.focus.radius) { // if not in AU, convert to AU
+				semimajorAxis = Util.toAU(semimajorAxis);
+			}
+			let discriminant = (props.mass / 5.97237e+24) / (Math.pow(props.orbit.focus.mass / 1.98855e+30, 5/2) * Math.pow(semimajorAxis, 9/8)) * 807;
+			if(discriminant < 1) {
+				eClass |= ENTITY.DWARF;
+			}
+		}
+
+	// The celestial is too small to be considered for planetary status
+	} else {
+		// The entity is a moon, mark it as a Minor Moon
+		if(eClass & ENTITY.MOON) {
+			eClass |= ENTITY.DWARF;
+		
+		} else if(props.orbit.eccentricity < 0.8) {
+			eClass |= ENTITY.ASTEROID;
+		} else {
+			eClass |= ENTITY.COMET;
+		}
+	}
+
+	return eClass;
 }
 
 /**
@@ -72,7 +109,7 @@ class Celestial extends RenderEntity {
 			
 			// Is the parent the root of the system?
 			if(!this.orbit.focus.designation) {
-				this.designation = this.orbit.focus.name + ""
+				this.designation = this.orbit.focus.name + "";
 			}
 
 		} else {
@@ -188,22 +225,44 @@ function loadCelestialData(data, parent) {
 	let entityClass;
 	let entityColor;
 
-	// This celestial is a star
-	if(data.stellarClass) {
-		entityClass = ENTITY.STAR;
-		entityColor = computeColorBV(data.colorIndex);
-	} else {
-		entityClass = getClass(data);
-		entityColor = '#98A7D6';
-	}
-
 	// A parent was defined
 	if(parent && data.orbit) {
 		data.orbit.focus = parent;
 	}
 
+	// This celestial is a star
+	if(data.stellarClass) {
+		entityClass = ENTITY.STAR;
+		entityColor = computeColorBV(data.colorIndex);
+
+	// Attempt to find the celestial class
+	} else {
+		entityClass = getClass(data);
+		entityColor = '#98A7D6';
+	}
+
 	celestial = new Celestial(data, entityColor, entityClass);
-	celestial.minRadius = 5;
+
+	switch(entityClass) {
+		case ENTITY.STAR:
+			celestial.minRadius = 6;
+			break;
+		case ENTITY.PLANET:
+			celestial.minRadius = 5;
+			break;
+		case ENTITY.DWARF | ENTITY.PLANET:
+			celestial.minRadius = 2.5;
+			break;
+		case ENTITY.MOON:
+			celestial.minRadius = 2;
+			break;
+		case ENTITY.COMET:
+		case ENTITY.DWARF | ENTITY.MOON:
+		case ENTITY.ASTEROID:
+			celestial.minRadius = 1;
+			break;
+
+	}
 
 	// Check to see if we need to iterate through any satellites
 	if(data.satellites) {
