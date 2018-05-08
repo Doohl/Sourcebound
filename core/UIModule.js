@@ -51,7 +51,7 @@ var UIM = (function() {
 			};
 			_windows.newsfeed.clearNews(LogicM.getUniverseClock());
 
-			this.addNews("Welcome back, Emperor.", null, LogicM.getUniverseClock(), 'self', false);
+			// this.addNews("Welcome back, Emperor.", null, LogicM.getUniverseClock(), 'self', false);
 		},
 
 		/**
