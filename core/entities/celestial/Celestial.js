@@ -1,4 +1,3 @@
-
 /**
  * A table describing a celestial body's physical properties
  * 
@@ -9,8 +8,11 @@
  * @property {number} radius - The celestial's (average) radius, in km
  * @property {number} tilt - The celestial's axial tilt, in radians
  * @property {number} rotationalPeriod - How long it takes for this celestial to completely rotate, in hours
+ * @property {number} [albedo] - Fraction of reflected incident radiation, coefficient. If not defined, will attempt to generate one
+ * @property {number} [surfaceTemperature] - The average surface temperature, in kelvin. If not defined, will attempt to generate one
  * @property {Array} [hydrosphere] - The celestial's combined liquids
- * @property {Object} [atmosphere] - The celestial's combined gasses
+ * @property {Array} [atmosphere] - The celestial's combined gasses
+ * @property {number} [pressure] - The celestial's surface atmosphere pressure
  * @property {OrbitalElements} [orbit] - The celestial's orbit container
  * @property {string} [designation] - The celestial's unique, constant designation. If not defined, will attempt to generate one.
  */
@@ -57,7 +59,7 @@ function getClass(props) {
 			eClass |= ENTITY.ASTEROID;
 		} else {
 			eClass |= ENTITY.COMET;
-		}
+		} 
 	}
 
 	return eClass;
@@ -92,6 +94,19 @@ class Celestial extends RenderEntity {
 
 		/** Rotational period (in hours) */
 		this.rotationPeriod = props.rotationPeriod;
+
+		/** The fraction of the total incident radiation power reflected back to space (0 to 1)*/
+		this.bondAlbedo = props.bondAlbedo;
+
+		/** Average surface temperature (in kelvin) */
+		this.surfaceTemperature = props.surfaceTemperature;
+
+		// If there is no surface temp, attempt to calculate the radiative equilibrium temperature */
+		if(!this.surfaceTemperature) {
+			//this.surfaceTemperature = Math.pow(
+					// https://astronomy.stackexchange.com/questions/10113/how-to-calculate-the-expected-surface-temperature-of-a-planet
+			//)
+		}
 
 		/** The hydrosphere defines the combined amount of liquid in this celestial */
 		this.hydrosphere = props.hydrosphere;
